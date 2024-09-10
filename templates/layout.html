@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/main.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Review and discuss games!">
+	<meta name="author" content="ya boi">
+	
+	{% if title %}
+	<title>{{ title }}</title>
+	{% else %}
+	<title>Game Review Site</title>
+	{% endif %}
+</head>
+
+<body>
+	<div class="container">
+		<div class="header-wrap">
+			<div class="primary-header">
+				<div class="primary-middle-panel">
+					<ul class="middle-panel-list">
+						<li>
+							<a id="home" href="{{ url_for('index') }}">Home</a>
+						</li>
+						<li>
+							<a id="profile" href="{{ url_for('profile') }}">Profile</a>
+						</li>
+						<li>
+							<a id="game-list" href="">Game List</a>
+						</li>
+						<li>
+							<a id="games" href="">Games</a>
+						</li>
+					</ul>
+				</div>
+			
+			
+				<div class="primary-right-panel">
+					{% if session["user_id"] %}
+						<a id="log-out" href="{{ url_for('logout') }}">Log Out</a>
+					{% else %}
+					<ul class="right-panel-list">
+						<li>
+							<a id="log-in" href="{{ url_for('login') }}">Log in</a>
+						</li>
+						<li>
+							<a id="sign-up" href="{{ url_for('signup') }}">Sign up</a>
+						</li>
+					</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		
+		<br>
+		<div class="content-wrap">
+			<div class="content">
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

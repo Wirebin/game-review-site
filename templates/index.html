@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block content %}
+	{% if session["user_id"] %}
+		<h1>Moi {{ username }}</h1>
+	{% else %}
+		<h1>MOI MOI</h1>
+	{% endif %}
+{% endblock %}
