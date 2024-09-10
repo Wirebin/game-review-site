@@ -1,0 +1,49 @@
+import secrets
+from app import db
+from flask import session
+from sqlalchemy.sql import text
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
+def signup(username, password):
+    sql = text("SELECT id from users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()
+    if user:
+        print("User already exists!")
+        return False
+    else:
+        hash_value = generate_password_hash(password)
+        sql = text("""INSERT INTO users (username, password, access_level)
+                      VALUES (:username, :password, 'user')""")
+        db.session.execute(sql, {"username":username, "password":hash_value})
+        db.session.commit()
+        print(f"User {username} created!")
+        return True
+    
+
+def login(username, password):
+    sql = text("SELECT id, password FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()
+    if not user:
+        print("User not found!")
+        return False
+    else:
+        if check_password_hash(user.password, password):
+            session["user_id"] = user.id
+            session["csfr-token"] = secrets.token_hex(16)
+            return True
+        else:
+            return False
+
+
+def logout():
+    del session["user_id"]
+    del session["csfr-token"]
+
+
+def get_user(user_id):
+    sql = text("SELECT username, access_level FROM users WHERE id=:user_id")
+    result = db.session.execute(sql, {"user_id":user_id})
+    return result.fetchone()
