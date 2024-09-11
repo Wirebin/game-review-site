@@ -12,7 +12,7 @@ def index():
 		return render_template("index.html", title="Home")
 	else:
 		# Get the user information (username and access_level)
-		user = account.get_user(user_id)
+		user = account.get_user_by_id(user_id)
 		# If user is an admin
 		if user.access_level == "admin":
 			return render_template("index.html", title="Home", username="admin")
@@ -64,9 +64,17 @@ def logout():
 	account.logout()
 	return redirect("/")
 
-@app.route("/profile")
-def profile():
-	if session.get("username"):
-		return render_template("/account/profile.html", title="Profile")
+
+@app.route("/profile/<username>")
+def profile(username):
+	user = account.get_user_by_name(username)
+	# Check if user exists
+	if not user:
+		abort(404)
 	else:
-		return abort(403)
+		return render_template("/account/profile.html", 
+						 		title=f"{username}'s Profile", 
+								username=username, 
+								access_level = user.access_level)
+
+

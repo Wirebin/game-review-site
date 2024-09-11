@@ -43,7 +43,13 @@ def logout():
     del session["csfr-token"]
 
 
-def get_user(user_id):
+def get_user_by_id(user_id):
     sql = text("SELECT username, access_level FROM users WHERE id=:user_id")
     result = db.session.execute(sql, {"user_id":user_id})
+    return result.fetchone()
+
+
+def get_user_by_name(username):
+    sql = text("SELECT id, access_level FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
     return result.fetchone()
