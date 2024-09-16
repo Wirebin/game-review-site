@@ -1,23 +1,23 @@
 from app import app
 import account
 from flask import render_template, session, request, redirect, flash, abort
+import games_manager
 
 
 @app.route("/")
 def index():
 	user_id = session.get("user_id")
-	
+	title = "Home"
+
 	# If not logged in
 	if not user_id:
-		return render_template("index.html", title="Home")
+		return render_template("index.html", title=title)
 	else:
 		# Get the user information (username and access_level)
 		user = account.get_user_by_id(user_id)
-		# If user is an admin
-		if user.access_level == "admin":
-			return render_template("index.html", title="Home", username="admin")
-		# If user is a normal user
-		return render_template("index.html", title="Home", username=user.username)
+		return render_template("index.html", title=title,
+						 		username=user.username,
+								access_level=user.access_level)
 		
 
 @app.route("/login", methods=["POST", "GET"])
@@ -76,5 +76,25 @@ def profile(username):
 						 		title=f"{username}'s Profile", 
 								username=username, 
 								access_level = user.access_level)
+
+
+@app.route("/control_panel")
+def control_panel():
+	return render_template("/admin/control_panel.html", title="Control Panel")
+
+
+@app.route("/control_panel/add_genre", methods=["POST", "GET"])
+def add_genre():
+	if request.method == "GET":
+		return render_template("/admin/add_genre.html", title="Add Genre")
+	
+	if request.method == "POST":
+		name = request.form["genre_name"].capitalize()
+		if not games_manager.add_genre(name):
+			flash(f"The genre '{name}' already exists.")
+			return redirect("#")
+		else:
+			flash(f"Genre '{name}' added to database.")
+			return redirect("#")
 
 

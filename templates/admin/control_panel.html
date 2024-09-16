@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="page-header">Control Panel</h1>
+    <br>
+    <div class="horizontal-flex">
+        <div class="left-nav">
+            <ul>
+                <li><a href="{{ url_for('add_genre') }}">Add Genre</a></li>
+                <li><a href="{{ url_for('add_game') }}">Add Game</a></li>
+            </ul>
+        </div>
+
+        <div id="separator"></div>
+
+        <div class="control-content">
+            {% block controls_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

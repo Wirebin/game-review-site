@@ -89,4 +89,24 @@ a:hover {
 	font-size: 20px;
 }
 
+.horizontal-flex {
+	display: flex;
+}
 
+.left-nav ul {
+	padding: 0;
+}
+
+#separator {
+	width: 2px;
+	height: auto;
+	background-color: #b9b9b9;
+	margin: 0 10px 0 10px;
+	background: linear-gradient(to bottom, #b9b9b900 0%, #8f8f8f 15%, 
+									   #8f8f8f 85%, #b9b9b900 100%);
+
+}
+
+.page-header {
+	border-bottom: 3px solid #b9b9b9;
+}
