@@ -20,16 +20,16 @@
 				<div class="primary-middle-panel">
 					<ul class="middle-panel-list">
 						<li>
-							<a id="home" href="{{ url_for('index') }}">Home</a>
+							<a id="home" class="header-link" href="{{ url_for('index') }}">Home</a>
 						</li>
 						<li>
-							<a id="profile" href="{{ url_for('profile', username=username) }}">Profile</a>
+							<a id="profile" class="header-link" href="{{ url_for('logged_profile', username=username) }}">Profile</a>
 						</li>
 						<li>
-							<a id="game-list" href="">Game List</a>
+							<a id="game-list" class="header-link" href="">Game List</a>
 						</li>
 						<li>
-							<a id="games" href="">Games</a>
+							<a id="games" class="header-link" href="">Games</a>
 						</li>
 					</ul>
 				</div>
@@ -42,14 +42,14 @@
 			
 				<div class="primary-right-panel">
 					{% if session["user_id"] %}
-						<a id="log-out" href="{{ url_for('logout') }}">Log Out</a>
+						<a id="log-out" class="header-link" href="{{ url_for('logout') }}">Log Out</a>
 					{% else %}
 					<ul class="right-panel-list">
 						<li>
-							<a id="log-in" href="{{ url_for('login') }}">Log in</a>
+							<a id="log-in" class="header-link" href="{{ url_for('login') }}">Log in</a>
 						</li>
 						<li>
-							<a id="sign-up" href="{{ url_for('signup') }}">Sign up</a>
+							<a id="sign-up" class="header-link" href="{{ url_for('signup') }}">Sign up</a>
 						</li>
 					</ul>
 					{% endif %}
