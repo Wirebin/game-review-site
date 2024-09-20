@@ -1,0 +1,41 @@
+{% extends "admin/control_panel.html" %}
+
+{% block controls_content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="controls">
+        <form action="/control_panel/add_game", method="POST">
+            <h1>Add a game</h1>
+            <div class="first-element">
+                <p>Name:
+                <input type="text" name="game_name"></p>
+            </div>
+
+            <div class="second-element">
+                <p>Genre:</p>
+                <div class="checkbox-wrap">
+                    {% for genre in genres %}
+                        <div class="genre_option">
+                            <input type="checkbox" id="{{genre}}" name="genre" value={{genre}}>
+                            <label for="{{genre}}">{{genre}}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="last-element">
+                <p>Release date:
+                <input type="date" name="release_date"></p>
+            </div>
+            
+            <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+            <input type="submit"  value="Add game">
+        </form>
+    </div>
+{% endblock %}

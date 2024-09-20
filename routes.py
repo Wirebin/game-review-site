@@ -77,6 +77,14 @@ def profile(username):
 								username=username, 
 								access_level = user.access_level)
 
+@app.route("/profile")
+def logged_profile():
+	user = session.get("user_id")
+	if not user:
+		return redirect("/login")
+	else:
+		return profile(account.get_user_by_id(user).username)
+	
 
 @app.route("/control_panel")
 def control_panel():
@@ -98,3 +106,22 @@ def add_genre():
 			return redirect("#")
 
 
+@app.route("/control_panel/add_game", methods=["POST", "GET"])
+def add_game():
+	if request.method == "GET":
+		genres = games_manager.get_genres()
+		return render_template("/admin/add_game.html", title="Add Game", 
+								genres=genres)
+
+	if request.method == "POST":
+		name = request.form["game_name"]
+		genres = request.form.getlist("genre")
+		release_date = request.form["release_date"]
+
+		if not games_manager.add_game(name, genres, release_date):
+			flash(f"The game already exists.")
+			return redirect("#")
+		else:
+			flash(f"Game '{name}' successfully added to the database!")
+			return redirect("#")
+		

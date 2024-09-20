@@ -1,9 +1,18 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	{% if session["user_id"] %}
-		<h1>Moi {{ username }}</h1>
-	{% else %}
-		<h1>MOI MOI</h1>
-	{% endif %}
+    {% if not session.get("user_id") %}
+        <h1>Welcome</h1>
+
+    {% else %}
+        <h1>Home</h1>
+
+        {% if access_level=="admin" %}
+            <a href="{{ url_for('control_panel') }}">Control Panel</a>
+
+        {% elif access_level=="user" %}
+        {% endif %}
+
+        <p>logged in as {{ username }}</p>
+    {% endif %}
 {% endblock %}
