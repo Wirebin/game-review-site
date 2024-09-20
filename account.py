@@ -23,7 +23,7 @@ def signup(username, password):
     
 
 def login(username, password):
-    sql = text("SELECT id, password FROM users WHERE username=:username")
+    sql = text("SELECT id, access_level, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
@@ -32,6 +32,7 @@ def login(username, password):
     else:
         if check_password_hash(user.password, password):
             session["user_id"] = user.id
+            session["access_level"] = user.access_level
             session["csfr-token"] = secrets.token_hex(16)
             return True
         else:
@@ -41,6 +42,7 @@ def login(username, password):
 def logout():
     del session["user_id"]
     del session["csfr-token"]
+    del session["access_level"]
 
 
 def get_user_by_id(user_id):
