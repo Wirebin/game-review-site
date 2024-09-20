@@ -12,10 +12,13 @@
     <div class="controls">
         <h1>Add a genre</h1>
         <form action="/control_panel/add_genre" method="POST">
-            <p>Name:</p>
-            <input type="text" name="genre_name">
-            <input type="hidden", name="csfr-token" value="{{ session.get('csfr-token') }}">
-            <input type="submit" value="Add a genre">
+            <div class="first-element">
+                <p>Name:</p>
+                <input type="text" name="genre_name">
+                <input type="hidden", name="csfr-token" value="{{ session.get('csfr-token') }}">
+                <input type="submit" value="Add a genre">
+            </div>
         </form>
+        <p>Must be at most 28 characters.</p>
     </div>
 {% endblock %}
