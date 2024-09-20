@@ -2,6 +2,7 @@ from app import app
 import account
 from flask import render_template, session, request, redirect, flash, abort
 import games_manager
+from decorators import admin_required
 
 
 @app.route("/")
@@ -87,11 +88,13 @@ def logged_profile():
 	
 
 @app.route("/control_panel")
+@admin_required
 def control_panel():
 	return render_template("/admin/control_panel.html", title="Control Panel")
 
 
 @app.route("/control_panel/add_genre", methods=["POST", "GET"])
+@admin_required
 def add_genre():
 	if request.method == "GET":
 		return render_template("/admin/add_genre.html", title="Add Genre")
@@ -107,6 +110,7 @@ def add_genre():
 
 
 @app.route("/control_panel/add_game", methods=["POST", "GET"])
+@admin_required
 def add_game():
 	if request.method == "GET":
 		genres = games_manager.get_genres()
