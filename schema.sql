@@ -8,6 +8,7 @@ CREATE TABLE users (
 CREATE TABLE games (
 	id SERIAL PRIMARY KEY,
 	name TEXT,
+	description TEXT,
 	release_date DATE,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
