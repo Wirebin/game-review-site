@@ -1,11 +1,14 @@
 import secrets
 from app import db
-from flask import session
+from flask import session, request, abort
 from sqlalchemy.sql import text
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def signup(username, password):
+    if session.get("csrf-token") != request.form.get("csrf-token"):
+        return abort(403)
+    
     sql = text("SELECT id from users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
@@ -23,6 +26,9 @@ def signup(username, password):
     
 
 def login(username, password):
+    if session.get("csrf-token") != request.form.get("csrf-token"):
+        return abort(403)
+    
     sql = text("SELECT id, access_level, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()

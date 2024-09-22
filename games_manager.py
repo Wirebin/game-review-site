@@ -1,5 +1,6 @@
 from app import db
 from sqlalchemy.sql import text
+from flask import session, request, abort
 
 def get_genres():
     sql = text("SELECT name FROM genres")
@@ -9,10 +10,11 @@ def get_genres():
     return genres
 
 
-def get_game_id(name):
-    sql = text("SELECT id FROM games WHERE LOWER(name)=:name")
+def get_game_by_name(name):
+    sql = text("""SELECT id, name, description, release_date 
+                  FROM games WHERE LOWER(name)=:name""")
     result = db.session.execute(sql, {"name":name.lower()})
-    return result.fetchone()[0]
+    return result.fetchone()
 
 
 def get_genre_id(name):
@@ -22,6 +24,9 @@ def get_genre_id(name):
 
 
 def add_genre(name):
+    if session.get("csrf-token") != request.form.get("csrf-token"):
+        return abort(403)
+    
     sql = text("SELECT name FROM genres WHERE LOWER(name)=:name")
     result = db.session.execute(sql, {"name":name.lower()})
     genre = result.fetchone()
@@ -35,6 +40,9 @@ def add_genre(name):
     
 
 def add_game(name, genres, release_date):
+    if session.get("csrf-token") != request.form.get("csrf-token"):
+        return abort(403)
+
     sql = text("SELECT name FROM games WHERE LOWER(name)=:name")
     result = db.session.execute(sql, {"name":name.lower()})
     game = result.fetchone()
