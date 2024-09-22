@@ -33,8 +33,8 @@ cd game-review-site
 In the root folder, create a .env file and type the following inside it:
 
 ```
-DATABASE_URL=<local-database-address>
-SECRET_KEY=<your-secret-key>
+DATABASE_URL=local-database-address
+SECRET_KEY=your-secret-key
 ```
 Remember to replace the template values with your own.
 
@@ -59,7 +59,7 @@ Here is a simple way to do it from the terminal while in root folder:
 ```shell
 psql -c "UPDATE users SET access_level = 'admin' WHERE username = '<username>'"
 ```
-Replace <username> with your username.
+Replace &lt;username&gt; with your username.
 
 ### Adding games and genres
 
