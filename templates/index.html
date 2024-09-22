@@ -7,12 +7,6 @@
     {% else %}
         <h1>Home</h1>
 
-        {% if access_level=="admin" %}
-            <a href="{{ url_for('control_panel') }}">Control Panel</a>
-
-        {% elif access_level=="user" %}
-        {% endif %}
-
         <p>logged in as {{ username }}</p>
     {% endif %}
 {% endblock %}
