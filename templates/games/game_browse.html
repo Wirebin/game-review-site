@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Games</h1>
+    <hr>
+    <ul>
+        {% for game in games.items %}
+            <li><a href="games/{{ game.name }}">{{ game.name }} - Released on: {{ game.release_date }}</a></li>
+            <hr>
+        {% endfor %}
+    </ul>
+    <div>
+        {% if games.has_prev %}
+            <a href="{{ url_for('game_browse', page=games.prev_num) }}">Previous</a>
+        {% endif %}
+        {% if games.has_next %}
+            <a href="{{ url_for('game_browse', page=games.next_num) }}">Next</a>
+        {% endif %}
+    </div>
+{% endblock %}

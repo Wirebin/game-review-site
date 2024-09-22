@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>{{ game.name }}</h1>
+    <hr>
+
+    <div>
+        <p>{{ game.description }}</p>
+    </div>
+    <br>
+    <div class="sub-header-wrap">
+        <div class="sub-header">
+            <ul class="horizontal-flex">
+                <li>
+                    <a href="">Reviews</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('game_posts', game_name=game.name) }}">Posts</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-content">
+    {% block game_content %}{% endblock %}
+    </div>
+{% endblock %}

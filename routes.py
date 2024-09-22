@@ -1,9 +1,14 @@
 from app import app
 import account
-from flask import render_template, session, request, redirect, flash, abort
+from flask import render_template, session, request, redirect, flash, abort, url_for
 import games_manager
-from decorators import admin_required
+import content_manager
+from decorators import admin_required, login_required
+from models import Game, Post, Review
 
+
+# Need to split this file into multiple later!
+#
 
 @app.route("/")
 def index():
@@ -129,3 +134,21 @@ def add_game():
 			flash(f"Game '{name}' successfully added to the database!")
 			return redirect("#")
 		
+
+@app.route("/games", methods=["GET"])
+def game_browse():
+	if request.method == "GET":
+		page = request.args.get("page", 1, type=int)
+		page_limit = 50
+		games = Game.query.paginate(page=page, per_page=page_limit)
+		return render_template("/games/game_browse.html", title="Games", games=games)
+	
+
+@app.route("/games/<game_name>", methods=["GET"])
+def game_page(game_name):
+	game = games_manager.get_game_by_name(game_name)
+	if not game:
+		return abort(404)
+	else:
+		return render_template("/games/game_page.html", title="", game=game)
+
