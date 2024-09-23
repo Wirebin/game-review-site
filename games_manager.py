@@ -10,6 +10,13 @@ def get_genres():
     return genres
 
 
+def get_game_by_id(game_id):
+    sql = text("""SELECT name, description, release_date 
+                  FROM games WHERE id=:game_id""")
+    result = db.session.execute(sql, {"game_id":game_id})
+    return result.fetchone()
+
+
 def get_game_by_name(name):
     sql = text("""SELECT id, name, description, release_date 
                   FROM games WHERE LOWER(name)=:name""")
@@ -56,13 +63,13 @@ def add_game(name, genres, release_date):
                             VALUES (:name, :release_date)""")
         db.session.execute(sql, {"name":name, "release_date":release_date})
         db.session.commit()
-        game_id = get_game_id(name)
+        game_id = get_game_by_name(name)
 
         # Connects game_ids with genre_ids
         sql = text("""INSERT INTO game_genres (game_id, genre_id)
                              VALUES (:game_id, :genre_id)""")
         for genre in genre_ids:
-            db.session.execute(sql, {"game_id":game_id, "genre_id":genre})
+            db.session.execute(sql, {"game_id":game_id.id, "genre_id":genre})
         db.session.commit()
         return True
 
