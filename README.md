@@ -38,6 +38,8 @@ SECRET_KEY=your-secret-key
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
 
+&nbsp;
+
 3. Run the following command in the root folder to create the needed database tables.
 
 ```shell
@@ -49,6 +51,9 @@ psql < schema.sql
 ```shell
 psql < db_setup.sql
 ```
+&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 23 genres and 10 games to the database.
+
+&nbsp;
 
 5. Run the application with the following:
 
@@ -81,3 +86,4 @@ From the control panel you can add new games and genres.
 ### How to make reviews or posts
 
 First you need to find the game you want to make a review or a post for. Then click on the corresponding buttons on the game page and start writing!
+
