@@ -140,7 +140,7 @@ def add_game():
 def game_browse():
 	if request.method == "GET":
 		page = request.args.get("page", 1, type=int)
-		page_limit = 50
+		page_limit = 20
 		games = Game.query.paginate(page=page, per_page=page_limit)
 		return render_template("/games/game_browse.html", title="Games", games=games)
 	
@@ -151,6 +151,7 @@ def game_page(game_name):
 	if not game:
 		return abort(404)
 	else:
+
 		return render_template("/games/game_page.html", title="", game=game)
 
 

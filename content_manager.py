@@ -32,7 +32,9 @@ def create_reply(content, game, post):
 
 
 def get_post_by_id(post_id):
-    sql = text("""SELECT id, title, content, created_at FROM posts WHERE id=:post_id""")
+    sql = text("""SELECT id, title, content, created_at 
+                  FROM posts 
+                  WHERE id=:post_id""")
     result = db.session.execute(sql, {"post_id":post_id})
     return result.fetchone()
 
