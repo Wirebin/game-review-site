@@ -16,7 +16,7 @@ The site features are:
 
 ## Status
 
-The search bar and the game list features are not implemented yet.
+Safe Log in and Sign up have been implemented, reviews and posts are still in the works. The search bar and the game list features are not implemented yet. The character limiters are not yet implemented. The user can navigate the site, find added games and add new genres and games to db as admin.
 Currently the website has barely any styling done to it, this will be done later.
 
 ## Setup Guide
