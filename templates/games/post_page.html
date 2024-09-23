@@ -11,10 +11,12 @@
         {% if replies.items %}
                 {% for reply in replies %}
                     <hr>
+                    <br>
                     <p>{{ reply.content }}
                     | Posted by {{ reply.user.username }} |
                     Posted at {{ reply.formatted_date() }}
                     </p>
+                    <br>
                 {% endfor %}
         {% endif %}
     </div>

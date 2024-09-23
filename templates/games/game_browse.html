@@ -6,6 +6,7 @@
     <ul>
         {% for game in games.items %}
             <li><a href="games/{{ game.name }}">{{ game.name }} - Released on: {{ game.release_date }}</a></li>
+            <br>
             <hr>
         {% endfor %}
     </ul>
