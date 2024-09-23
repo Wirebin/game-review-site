@@ -4,7 +4,7 @@ from flask import render_template, session, request, redirect, flash, abort, url
 import games_manager
 import content_manager
 from decorators import admin_required, login_required
-from models import Game, Post, Review
+from models import Game, Post, Reply, Review
 
 
 # Need to split this file into multiple later!
@@ -72,6 +72,7 @@ def logout():
 
 
 @app.route("/profile/<username>")
+@login_required
 def profile(username):
 	user = account.get_user_by_name(username)
 	# Check if user exists
@@ -151,4 +152,60 @@ def game_page(game_name):
 		return abort(404)
 	else:
 		return render_template("/games/game_page.html", title="", game=game)
+
+
+@app.route("/games/<game_name>/posts", methods=["GET"])
+def game_posts(game_name):
+	game = games_manager.get_game_by_name(game_name)
+	if not game:
+		return abort(404)
+	else:
+		page = request.args.get("page", 1, type=int)
+		page_limit = 25
+		posts = Post.query.filter_by(game_id=game.id).paginate(page=page, per_page=page_limit)
+		poster = account.get_user_by_id(session.get("user_id"))
+		return render_template("/games/game_posts.html", title="Posts", 
+						 		poster=poster, game=game, posts=posts)
+	
+
+@app.route("/games/<game_name>/posts/create_post", methods=["POST", "GET"])
+@login_required
+def create_post(game_name):
+	game = games_manager.get_game_by_name(game_name)
+	if request.method == "GET":
+		if not game:
+			return abort(404)
+		return render_template("games/create_post.html", game=game)
+	
+	if request.method == "POST":
+		title = request.form["title"]
+		content = request.form["content"]
+		if content_manager.create_post(title, content, game):
+			return redirect(url_for("game_posts", game_name=game.name))
+		else:
+			flash("There was an error, please try again.")
+			return redirect("#")
+		
+
+@app.route("/games/<game_name>/posts/<post_id>", methods=["POST", "GET"])
+def post_page(game_name, post_id):
+	game = games_manager.get_game_by_name(game_name)
+	post = content_manager.get_post_by_id(post_id)
+	reply = request.args.get("reply", 1, type=int)
+	reply_limit = 10
+	replies = Reply.query.filter_by(post_id=post_id).paginate(page=reply, per_page=reply_limit)
+
+	if not game or not post:
+		return abort(404)
+	if request.method == "GET":
+		return render_template("games/post_page.html", post=post, 
+						 		game=game, replies=replies)
+	if request.method == "POST":
+		content = request.form["content"]
+		if not content_manager.create_reply(content, game, post):
+			return abort(403)
+		else:
+			flash("New post created successfully")
+			return redirect("#")
+		
 

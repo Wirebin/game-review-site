@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div>
+        <h1>Create a new post for game: {{ game.name }}</h1>
+
+        <form action="{{ url_for('create_post', game_name=game.name) }}" method="POST">
+            <p>Title:<br>
+            <input type="text" name="title" placeholder="Type something..."></p>
+            
+            <p>Content:<br>
+            <textarea name="content" placeholder="Type something..."></textarea></p>
+            <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+            <input type="submit" value="Post">
+        </form>
+    </div>
+{% endblock %}

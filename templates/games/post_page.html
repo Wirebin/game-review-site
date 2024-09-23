@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div>
+        <h1>{{ post.title }}</h1> Created by
+        <br>
+        <p>{{ post.content }}</p>
+    </div>
+
+    <div>
+        {% if replies.items %}
+                {% for reply in replies %}
+                    <hr>
+                    <p>{{ reply.content }}
+                    | Posted by {{ reply.user.username }} |
+                    Posted at {{ reply.formatted_date() }}
+                    </p>
+                {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if session.get("user_id") %}
+        <div>
+            <hr>
+            <br>
+            <form action="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}" method="POST">
+                <p>Reply to the post:</p>
+                <textarea name="content"></textarea>
+                <input type="submit" value="Post">
+            </form>
+        </div>
+    {% else %}
+        <div>
+            <hr>
+            <br>
+            <p>You need to be logged in to reply.</p>
+        </div>
+    {% endif %}
+{% endblock %}

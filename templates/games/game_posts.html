@@ -1,0 +1,20 @@
+{% extends "games/game_page.html" %}
+
+{% block game_content %}
+    <div>
+        <h2>Posts</h2>
+
+        <a href="{{ url_for('create_post', game_name=game.name) }}">Create a post</a>
+        <hr>
+        <br>
+        <div class="posts">
+            {% for post in posts %}
+                <div class="post">
+                    <a href="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}">{{ post.title }}</a>
+                    | Created by: {{ poster.username }} |
+                    Created at: {{ post.formatted_date() }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
