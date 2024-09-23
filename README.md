@@ -16,7 +16,7 @@ The site features are:
 
 ## Status
 
-Safe Log in and Sign up have been implemented, reviews and posts are still in the works. The search bar and the game list features are not implemented yet. The character limiters are not yet implemented. The user can navigate the site, find added games and add new genres and games to db as admin.
+Safe Log in and Sign up have been implemented, reviews and posts are still in the works. The 'search bar' and 'game list' features are not implemented yet. The character limiters are not yet implemented. The user can navigate the site, find added games and add new genres and games to db as admin.
 Currently the website has barely any styling done to it, this will be done later.
 
 ## Setup Guide
@@ -36,8 +36,7 @@ cd game-review-site
 DATABASE_URL=local-database-address
 SECRET_KEY=your-secret-key
 ```
-Remember to replace the template values with your own.
-
+&nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
 
 3. Please also run the following on the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
 
