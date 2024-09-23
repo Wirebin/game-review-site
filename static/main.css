@@ -143,6 +143,9 @@ textarea {
 	margin-right: 20px;
 }
 
+.textarea {
+	white-space: pre-line;
+}
 
 @media (max-width: 640px) {
 	.genre_option {
