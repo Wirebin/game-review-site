@@ -53,7 +53,6 @@ CREATE TABLE replies (
 	user_id INTEGER REFERENCES users,
 	game_id INTEGER REFERENCES games,
 	post_id INTEGER REFERENCES posts,
-	reply_count INTEGER,
 	content TEXT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
