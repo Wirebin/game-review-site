@@ -18,7 +18,7 @@ def get_game_by_id(game_id):
 
 
 def get_game_by_name(name):
-    sql = text("""SELECT id, name, description, release_date 
+    sql = text("""SELECT id, name, TRIM(BOTH '''' FROM description) AS description, release_date 
                   FROM games WHERE LOWER(name)=:name""")
     result = db.session.execute(sql, {"name":name.lower()})
     return result.fetchone()
