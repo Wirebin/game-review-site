@@ -38,13 +38,19 @@ SECRET_KEY=your-secret-key
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
 
-3. Please also run the following on the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
+3. Run the following command in the root folder to create the needed database tables.
 
 ```shell
-psql > db_setup.sql
+psql < schema.sql
 ```
 
-4. Run the application with the following:
+4. Please also run the following in the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
+
+```shell
+psql < db_setup.sql
+```
+
+5. Run the application with the following:
 
 ```shell
 flask --app app.py run
