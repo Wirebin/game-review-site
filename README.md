@@ -23,14 +23,14 @@ Currently the website has barely any styling done to it, this will be done later
 
 NOTE: This setup shows the steps for Linux, if you are using a different OS, you might need to adjust accordingly.
 
-Clone the repository:
+1. Clone the repository:
 
 ```shell
 git clone https://github.com/Wirebin/game-review-site
 cd game-review-site
 ```
 
-In the root folder, create a .env file and type the following inside it:
+2. In the root folder, create a .env file and type the following inside it:
 
 ```
 DATABASE_URL=local-database-address
@@ -39,10 +39,16 @@ SECRET_KEY=your-secret-key
 Remember to replace the template values with your own.
 
 
-Please also run the following on the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
+3. Please also run the following on the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
 
 ```shell
 psql > db_setup.sql
+```
+
+4. Run the application with the following:
+
+```shell
+flask --app app.py run
 ```
 
 ## How to use
