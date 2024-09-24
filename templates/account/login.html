@@ -18,6 +18,7 @@
 		<p>Password:<br>
 		<input type="text" name="password"></p>
 		
+		<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
 		<input type="submit" value="Log In">
 	</form>
 	<br>

@@ -28,6 +28,7 @@
             <form action="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}" method="POST">
                 <p>Reply to the post:</p>
                 <textarea name="content"></textarea>
+                <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
                 <input type="submit" value="Post">
             </form>
         </div>

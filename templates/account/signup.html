@@ -20,12 +20,9 @@
 		<p>Your password must include:</p>
 		<ul class="signup-list">
 			<li><p>8 to 128 characters.</p></li>
-			<li>
-				<p>Only the following characters: a-z, A-Z, numbers: 0-9</p>
-				<p>and special characters: !, #, %, &, ?, @.</p>
-			</li>
 		</ul><br>
 		
+		<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
 		<input type="submit" value="Sign Up">
 	</form>
 
