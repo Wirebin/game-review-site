@@ -51,7 +51,7 @@ psql < schema.sql
 ```shell
 psql < db_setup.sql
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 23 genres and 10 games to the database.
+&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 28 genres and 25 games to the database.
 
 &nbsp;
 
