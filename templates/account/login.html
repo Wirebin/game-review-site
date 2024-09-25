@@ -13,15 +13,15 @@
 	
 	<form action="/login" method="POST">
 		<p>Username:<br>
-		<input type="text" name="username"></p>
+		<input type="text" name="username" maxlength="20" autocomplete="off"></p>
 		
 		<p>Password:<br>
-		<input type="text" name="password"></p>
+		<input type="text" name="password" maxlength="128" autocomplete="off"></p>
 		
 		<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
 		<input type="submit" value="Log In">
 	</form>
 	<br>
 	<p>No account? Make one here: </p>
-	<a href="{{ url_for('signup') }}">Sign Up</a>
+	<a class="small-link" href="{{ url_for('signup') }}">Sign Up</a>
 {% endblock %}
