@@ -40,13 +40,21 @@ SECRET_KEY=your-secret-key
 
 &nbsp;
 
-3. Run the following command in the root folder to create the needed database tables.
+3. Next, activate the virtual environment and install the necessary dependencies.
+
+```shell
+python3 -m venv venv
+source venv/bin/activate
+pip install -r ./requirements.txt
+```
+
+4. Run the following command in the root folder to create the needed database tables.
 
 ```shell
 psql < schema.sql
 ```
 
-4. Please also run the following in the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
+5. Please also run the following in the root folder. It will add premade data to the database tables so that you don't need to do all of the hard work. The website will look quite empty without it:
 
 ```shell
 psql < db_setup.sql
@@ -55,7 +63,7 @@ psql < db_setup.sql
 
 &nbsp;
 
-5. Run the application with the following:
+6. Run the application with the following:
 
 ```shell
 flask --app app.py run
