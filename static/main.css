@@ -18,6 +18,16 @@ body {
 	font-size: 22px;
 }
 
+.header-link:hover {
+	color: #830000;
+	border-bottom: solid #830000 4px;
+	border-radius: 3px;
+}
+
+.small-link:hover {
+	text-decoration: underline;
+}
+
 .header-wrap {
 	background-color: #ffb20b;
 	border-bottom: 1px solid black;
@@ -69,10 +79,6 @@ body {
 
 .content * {
 	margin: 0;
-}
-
-a:hover {
-	color: rgb(131, 0, 0);
 }
 
 .signup-list li {
@@ -145,6 +151,35 @@ textarea {
 
 .textarea {
 	white-space: pre-line;
+}
+
+.game {
+	height: 40px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+	border: solid black 1px;
+	background-color: #d5d1e9;
+}
+
+.game-info {
+	display: flex;
+	gap: 80px;
+}
+
+.game a {
+	margin-left: 10px;
+}
+
+.game div {
+	margin-right: 10px;
+}
+
+.nav-wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 @media (max-width: 640px) {

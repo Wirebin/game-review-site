@@ -3,19 +3,33 @@
 {% block content %}
     <h1>Games</h1>
     <hr>
-    <ul>
+    <br>
+
+    <div class="games-wrap">
         {% for game in games.items %}
-            <li><a href="games/{{ game.name }}">{{ game.name }} - Released on: {{ game.release_date }}</a></li>
-            <br>
-            <hr>
+            <div class="game">
+                <!--<img src="/static/images/image-placeholder.jpg">-->
+                <a class="small-link" href="games/{{ game.name }}"><h3>{{ game.name }}</h3></a>
+                <div class="game-info">
+                    <div class="avg-score">Average score: </div>
+                    <div class="user-score">Your score: </div>
+                    <div class="release">Released on: {{ game.release_date }}</div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-    <div>
+    </div>
+
+    <div class="nav-wrap">
         {% if games.has_prev %}
-            <a href="{{ url_for('game_browse', page=games.prev_num) }}">Previous</a>
+            <a class="small-link" href="{{ url_for('game_browse', page=games.prev_num) }}">&lt; Previous</a>
         {% endif %}
+        
+        {% for page in games.iter_pages() %}
+            {{ page }}
+        {% endfor %}
+        
         {% if games.has_next %}
-            <a href="{{ url_for('game_browse', page=games.next_num) }}">Next</a>
+            <a class="small-link" href="{{ url_for('game_browse', page=games.next_num) }}">Next &gt;</a>
         {% endif %}
     </div>
 {% endblock %}
