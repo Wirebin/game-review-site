@@ -26,7 +26,7 @@
 							<a id="profile" class="header-link" href="{{ url_for('logged_profile', username=username) }}">Profile</a>
 						</li>
 						<li>
-							<a id="game-list" class="header-link" href="">Game List</a>
+							<a id="game-list" class="header-link" href="">My List</a>
 						</li>
 						<li>
 							<a id="games" class="header-link" href="{{ url_for('game_browse') }}">Games</a>
@@ -35,8 +35,8 @@
 				</div>
 			
 				<div class="search-bar">
-					<form action="", method="POST" autocomplete="off">
-						<input placeholder="Search games...">
+					<form action="/search", method="GET" autocomplete="off">
+						<input type="text" name="query" placeholder="Search games...">
 					</form>
 				</div>
 			
