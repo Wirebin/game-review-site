@@ -5,31 +5,51 @@
     <hr>
     <br>
 
+    <!-- GAMES -->
     <div class="games-wrap">
         {% for game in games.items %}
-            <div class="game">
-                <!--<img src="/static/images/image-placeholder.jpg">-->
-                <a class="small-link" href="games/{{ game.name }}"><h3>{{ game.name }}</h3></a>
-                <div class="game-info">
-                    <div class="avg-score">Average score: </div>
-                    <div class="user-score">Your score: </div>
-                    <div class="release">Released on: {{ game.release_date }}</div>
+            <a class="small-link" href="games/{{ game.name }}">       
+                <div class="game">
+                    <!--<img src="/static/images/image-placeholder.jpg">-->
+                    <span>{{ game.name }}</span>
+                    <div class="game-info">
+                        <div class="avg-score">Average score: </div>
+                        <div class="user-score">Your score: </div>
+                        <div class="release">Released on: {{ game.release_date }}</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 
+    <!-- PAGE NAVIGATION -->
     <div class="nav-wrap">
-        {% if games.has_prev %}
-            <a class="small-link" href="{{ url_for('game_browse', page=games.prev_num) }}">&lt; Previous</a>
+        {% if games.page != 1 %}
+            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=1)}}">«</a>
         {% endif %}
         
-        {% for page in games.iter_pages() %}
-            {{ page }}
+        {% if games.has_prev %}
+            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=games.prev_num) }}">&lt;</a>
+        {% endif %}
+        
+        {% for page in games.iter_pages(left_edge=0, right_edge=0) %}
+            {% if page %}
+                {% if page != games.page %}
+                    <a class="standard-link nav-link" href="{{ url_for('game_browse', page=page) }}">{{ page }}</a>
+                {% else %}
+                    <span class="nav-link active">{{page}}</span>
+                {% endif %}
+            {% else %}
+
+            {% endif %}
         {% endfor %}
         
         {% if games.has_next %}
-            <a class="small-link" href="{{ url_for('game_browse', page=games.next_num) }}">Next &gt;</a>
+            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=games.next_num) }}">&gt;</a>
+        {% endif %}
+
+        {% if games.page != games.pages %}
+            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=games.pages)}}">»</a>
         {% endif %}
     </div>
 {% endblock %}
