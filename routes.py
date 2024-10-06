@@ -26,6 +26,18 @@ def index():
 								access_level=user.access_level)
 		
 
+@app.route("/search", methods=["GET"])
+def search():
+	if request.method == "GET":
+		query = request.args["query"]
+		page = request.args.get("page", 1, type=int)
+		page_limit = 20
+		filtered_games = Game.query.filter(Game.name.ilike(f"%{query}%"))
+		games = filtered_games.paginate(page=page, per_page=page_limit)
+		
+		return render_template('search_result.html', query=query, results=games)
+
+
 @app.route("/login", methods=["POST", "GET"])
 def login():
 	if request.method == "GET":
@@ -54,12 +66,11 @@ def signup():
 		username = request.form["username"]
 		password = request.form["password"]
 		
-		# Check if user already exists
+		# Check if user creation is possible
 		if not account.signup(username, password):
-			flash(f"Username not available.", "error")
-			return redirect("#")
+			return render_template("/account/signup.html", title="Sign Up")
 		
-		# If username is free, new account is created
+		# If OK, new account is created
 		else:
 			flash(f"Account created for {username}. Please log in.", "info")
 			return redirect("/login")
@@ -141,18 +152,23 @@ def game_browse():
 	if request.method == "GET":
 		page = request.args.get("page", 1, type=int)
 		page_limit = 20
-		games = Game.query.paginate(page=page, per_page=page_limit)
+		games = Game.query.order_by(Game.name).paginate(page=page, per_page=page_limit)
+
 		return render_template("/games/game_browse.html", title="Games", games=games)
 	
 
 @app.route("/games/<game_name>", methods=["GET"])
 def game_page(game_name):
 	game = games_manager.get_game_by_name(game_name)
+
 	if not game:
 		return abort(404)
 	else:
-
-		return render_template("/games/game_page.html", title="", game=game)
+		posts_preview = content_manager.get_posts(game.id)[:3]
+		reviews_preview = content_manager.get_reviews(game.id)[:3]
+		return render_template("/games/game_page.html", title="", game=game, 
+						 		current_page="overview", posts=posts_preview,
+								reviews=reviews_preview)
 
 
 @app.route("/games/<game_name>/posts", methods=["GET"])
@@ -166,7 +182,8 @@ def game_posts(game_name):
 		posts = Post.query.filter_by(game_id=game.id).paginate(page=page, per_page=page_limit)
 		poster = account.get_user_by_id(session.get("user_id"))
 		return render_template("/games/game_posts.html", title="Posts", 
-						 		poster=poster, game=game, posts=posts)
+						 		poster=poster, game=game, 
+								posts=posts, current_page="posts")
 	
 
 @app.route("/games/<game_name>/posts/create_post", methods=["POST", "GET"])
@@ -181,15 +198,16 @@ def create_post(game_name):
 	if request.method == "POST":
 		title = request.form["title"]
 		content = request.form["content"]
-		if content_manager.create_post(title, content, game):
-			return redirect(url_for("game_posts", game_name=game.name))
-		else:
-			flash("There was an error, please try again.")
-			return redirect("#")
+		content_manager.create_post(title, content, game)
+
+		return redirect(url_for("game_posts", game_name=game.name))
 		
 
 @app.route("/games/<game_name>/posts/<post_id>", methods=["POST", "GET"])
 def post_page(game_name, post_id):
+	if not post_id.isdigit():
+		abort(404)
+	
 	game = games_manager.get_game_by_name(game_name)
 	post = content_manager.get_post_by_id(post_id)
 	reply = request.args.get("reply", 1, type=int)
@@ -203,10 +221,8 @@ def post_page(game_name, post_id):
 						 		game=game, replies=replies)
 	if request.method == "POST":
 		content = request.form["content"]
-		if not content_manager.create_reply(content, game, post):
-			return abort(403)
-		else:
-			flash("New post created successfully")
-			return redirect("#")
-		
+		content_manager.create_reply(content, game, post)
 
+		flash("New reply created successfully")
+		return redirect("#")
+		
