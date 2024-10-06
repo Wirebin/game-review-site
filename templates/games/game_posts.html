@@ -1,12 +1,10 @@
 {% extends "games/game_page.html" %}
 
 {% block game_content %}
-    <div>
-        <h2>Posts</h2>
 
+    <!-- POSTS -->
+    <div class="sub-header">
         <a href="{{ url_for('create_post', game_name=game.name) }}">Create a post</a>
-        <hr>
-        <br>
         <div class="posts">
             {% for post in posts %}
                 <div class="post">
@@ -17,5 +15,20 @@
                 <br>
             {% endfor %}
         </div>
+    </div>
+
+    <!-- PAGE NAVIGATION -->
+    <div class="nav-wrap">
+        {% if posts.has_prev %}
+            <a class="small-link" href="{{ url_for('game_posts', page=posts.prev_num) }}">&lt; Previous</a>
+        {% endif %}
+        
+        {% for page in posts.iter_pages() %}
+            {{ page }}
+        {% endfor %}
+        
+        {% if posts.has_next %}
+            <a class="small-link" href="{{ url_for('game_posts', page=posts.next_num) }}">Next &gt;</a>
+        {% endif %}
     </div>
 {% endblock %}
