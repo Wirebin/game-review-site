@@ -11,7 +11,12 @@ class Game(db.Model):
     __tablename__ = "games"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
+    developer = db.Column(db.Text, nullable=False)
+    publisher = db.Column(db.Text, nullable=False)
     release_date = db.Column(db.Date, nullable=False)
+
+    def formatted_date(self):
+        return self.release_date.strftime("%d.%m.%Y")
 
 
 class Post(db.Model):
@@ -52,7 +57,9 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"), nullable=False)
+    title = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
+    score = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.Date, nullable=False)
 
 
