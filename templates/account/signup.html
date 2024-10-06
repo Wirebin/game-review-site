@@ -12,11 +12,15 @@
 	<h1>Sign Up</h1>
 	
 	<form action="/signup" method="POST">
-		<p>Username:<br>
-		<input type="text" name="username" maxlength="20" autocomplete="off"></p>
-		
-		<p>Password:<br>
-		<input type="text" name="password" maxlength="128" autocomplete="off"></p>
+		<div class="username-tab">
+			<p>Username:<br>
+			<input type="text" name="username" maxlength="20" autocomplete="on" value="{{ request.form['username'] }}"></p>
+		</div>
+
+		<div class="password-tab">
+			<p>Password:<br>
+			<input type="password" name="password" maxlength="128" autocomplete="off"></p>
+		</div>
 		<p>Your password must include:</p>
 		<ul class="signup-list">
 			<li><p>8 to 128 characters.</p></li>

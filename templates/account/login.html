@@ -9,19 +9,25 @@
 		{% endif %}
 	{% endwith %}
 
-	<h1>Log in</h1>
-	
-	<form action="/login" method="POST">
-		<p>Username:<br>
-		<input type="text" name="username" maxlength="20" autocomplete="off"></p>
+	<div class="centered small-box">
+		<h1 class="">Log in</h1>
 		
-		<p>Password:<br>
-		<input type="text" name="password" maxlength="128" autocomplete="off"></p>
-		
-		<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
-		<input type="submit" value="Log In">
-	</form>
-	<br>
-	<p>No account? Make one here: </p>
-	<a class="small-link" href="{{ url_for('signup') }}">Sign Up</a>
+		<form action="/login" method="POST">
+			<div class="username-tab">
+				<p>Username:<br>
+				<input type="text" name="username" maxlength="20"></p>
+			</div>
+
+			<div class="password-tab">
+				<p>Password:<br>
+				<input type="password" name="password" maxlength="128" autocomplete="off"></p>
+			</div>
+
+			<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+			<input type="submit" value="Log In">
+		</form>
+		<br>
+		<p>No account? Make one here: </p>
+		<a class="small-link" href="{{ url_for('signup') }}">Sign Up</a>
+	</div>
 {% endblock %}

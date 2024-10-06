@@ -2,27 +2,107 @@
 
 {% block content %}
     <h1>{{ game.name }}</h1>
-    <hr>
+    <hr><br>
 
-    Description:
-    <div class="textarea">
-        {{ game.description }}
-    </div>
-    <br>
-    <hr>
     <div class="sub-header-wrap">
         <div class="sub-header">
             <ul class="horizontal-flex">
                 <li>
-                    <a class="sub-header" href="">Reviews</a>
+                    <a class="{{ 'active' if current_page == 'overview' }} sub-header" \
+                    href="{{ url_for('game_page', game_name=game.name) }}">Overview</a>
                 </li>
                 <li>
-                    <a class="sub-header" href="{{ url_for('game_posts', game_name=game.name) }}">Posts</a>
+                    <a class="{{ 'active' if current_page == 'reviews' }} sub-header" \
+                    href="{{ url_for('game_reviews', game_name=game.name) }}">Reviews</a>
+                </li>
+                <li>
+                    <a class="{{ 'active' if current_page == 'posts' }} sub-header" \
+                    href="{{ url_for('game_posts', game_name=game.name) }}">Posts</a>
                 </li>
             </ul>
         </div>
     </div>
+    <br>
+    <hr>
+ 
     <div class="page-content">
-    {% block game_content %}{% endblock %}
+        {% block game_content %}
+            <div class="horizontal-flex">
+                <div class="left-tab">
+                    <a class="add-to-list" href="">Add to List</a>
+                    <br><br><hr><br>
+                    <div class="left-tab-info">
+                        <div>
+                            <span class="dark-text u-line">Information</span></div>
+                        <div>
+                            <span class="dark-text">Title:</span> {{ game.name }}</div>
+                        <div>
+                            <span class="dark-text">Release Date:</span> {{ game.release_date }}</div>
+                        <div>
+                            <span class="dark-text">Average Score:</span> -</div>
+                        <div>
+                            <span class="dark-text">Developer:</span> {{ game.developer }}</div>
+                        <div>
+                            <span class="dark-text">Publisher:</span> {{ game.publisher }}</div>
+                    </div>
+                </div>
+                <hr>
+
+                <div>
+                    <div class="text-area">
+                        <h3>Description:</h3>
+                        {{ game.description }}
+                    </div>
+
+                    <br><hr><br>
+                    <div class="horizontal-flex preview-wrap">
+                        <div class="preview">
+                            <div class="preview-header horizontal-flex">
+                                <h3>Reviews</h3>
+                                {% if reviews %}
+                                    <a class="standard-link" href="{{ url_for('game_reviews', game_name=game.name) }}">See All Reviews ></a>
+                                {% endif %}
+                            </div>
+
+                            <div class="preview-reviews">
+                                {% if reviews %}
+                                    {% for review in reviews %}
+                                        <a href="{{ url_for('review_page', game_name=game.name, review_id=review.id) }}">
+                                            <div class="preview-content">
+                                                {{ review.title }}
+                                            </div>
+                                        </a>
+                                        <br>
+                                    {% endfor %}
+                                {% else %}
+                                <a class="standard-link" href="{{ url_for('create_review', game_name=game.name) }}">No reviews yet, create one?</a>
+                                {% endif %}
+                            </div>
+                        </div>
+        
+                        <div class="preview">
+                            <div class="preview-header horizontal-flex">
+                                <h3>Posts</h3>
+                                {% if posts %}
+                                <a class="standard-link" href="{{ url_for('game_posts', game_name=game.name) }}">See All Posts ></a>
+                                {% endif %}
+                            </div>
+                            <div class="preview-posts">
+                                {% if posts %}
+                                    {% for post in posts %}
+                                        <div class="preview-content">
+                                            <a href="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}">{{ post.title }}</a>
+                                        </div>
+                                        <br>
+                                    {% endfor %}
+                                {% else %}
+                                    <a class="standard-link" href="{{ url_for('create_post', game_name=game.name) }}">No posts yet, create one?</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
     </div>
 {% endblock %}
