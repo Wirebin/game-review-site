@@ -2,49 +2,55 @@
 
 {% block content %}
     <div class="games-wrap">
-        {% for game in results %}
-            <a class="small-link" href="games/{{ game.name }}">       
-                <div class="game">
-                    <!--<img src="/static/images/image-placeholder.jpg">-->
-                    <span>{{ game.name }}</span>
-                    <div class="game-info">
-                        <div class="avg-score">Average score: </div>
-                        <div class="user-score">Your score: </div>
-                        <div class="release">Released on: {{ game.release_date }}</div>
+        {% if games %}
+            {% for game in results %}
+                <a class="small-link" href="games/{{ game.name }}">       
+                    <div class="game">
+                        <!--<img src="/static/images/image-placeholder.jpg">-->
+                        <span>{{ game.name }}</span>
+                        <div class="game-info">
+                            <div class="avg-score">Average score: </div>
+                            <div class="user-score">Your score: </div>
+                            <div class="release">Released on: {{ game.release_date }}</div>
+                        </div>
                     </div>
-                </div>
-            </a>
-        {% endfor %}
+                </a>
+            {% endfor %}
+        {% else %}
+            <h2>No games were found...</h2>
+        {% endif %}
     </div>
 
     <!-- PAGE NAVIGATION -->
     <div class="nav-wrap">
-        {% if results.page != 1 %}
-            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=1)}}">«</a>
-        {% endif %}
-        
-        {% if results.has_prev %}
-            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=results.prev_num) }}">&lt;</a>
-        {% endif %}
-        
-        {% for page in results.iter_pages(left_edge=0, right_edge=0) %}
-            {% if page %}
-                {% if page != results.page %}
-                    <a class="standard-link nav-link" href="{{ url_for('game_browse', page=page) }}">{{ page }}</a>
-                {% else %}
-                    <span class="nav-link active">{{page}}</span>
-                {% endif %}
-            {% else %}
-
+        {% if pages %}
+            {% if results.page != 1 %}
+                <a class="standard-link nav-link" href="{{ url_for('game_browse', page=1)}}">«</a>
             {% endif %}
-        {% endfor %}
-        
-        {% if results.has_next %}
-            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=results.next_num) }}">&gt;</a>
-        {% endif %}
+            
+            {% if results.has_prev %}
+                <a class="standard-link nav-link" href="{{ url_for('game_browse', page=results.prev_num) }}">&lt;</a>
+            {% endif %}
+            
+            {% for page in results.iter_pages(left_edge=0, right_edge=0) %}
+                {% if page %}
+                    {% if page != results.page %}
+                        <a class="standard-link nav-link" href="{{ url_for('game_browse', page=page) }}">{{ page }}</a>
+                    {% else %}
+                        <span class="nav-link active">{{page}}</span>
+                    {% endif %}
+                {% else %}
 
-        {% if results.page != results.pages %}
-            <a class="standard-link nav-link" href="{{ url_for('game_browse', page=results.pages)}}">»</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if results.has_next %}
+                <a class="standard-link nav-link" href="{{ url_for('game_browse', page=results.next_num) }}">&gt;</a>
+            {% endif %}
+
+            {% if results.page != results.pages %}
+                <a class="standard-link nav-link" href="{{ url_for('game_browse', page=results.pages)}}">»</a>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

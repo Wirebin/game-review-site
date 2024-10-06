@@ -226,3 +226,51 @@ def post_page(game_name, post_id):
 		flash("New reply created successfully")
 		return redirect("#")
 		
+
+@app.route("/games/<game_name>/reviews/", methods=["GET"])
+def game_reviews(game_name):
+	game = games_manager.get_game_by_name(game_name)
+	if not game:
+		return abort(404)
+	else:
+		page = request.args.get("page", 1, type=int)
+		page_limit = 10
+		reviews = Review.query.filter_by(game_id=game.id).paginate(page=page, per_page=page_limit)
+
+		return render_template("games/game_reviews.html", game=game, reviews=reviews, current_page="reviews")
+
+
+@app.route("/games/<game_name>/reviews/create_review", methods=["POST", "GET"])
+@login_required
+def create_review(game_name):
+	game = games_manager.get_game_by_name(game_name)
+
+	if request.method == "GET":
+		return render_template("games/create_review.html", game=game)
+	
+	if request.method == "POST":
+		title = request.form["title"]
+		content = request.form["content"]
+		score = request.form.get("score")
+		if not score:
+			flash("Please select a score before publishing.", "error")
+			return render_template("games/create_review.html", game=game)
+
+		if not content_manager.create_review(game, title, content, score):
+			return render_template("games/create_review.html", game=game)
+
+		flash("A review successfully created!", "info")
+		return redirect(url_for("game_reviews", game_name=game.name))
+
+
+@app.route("/games/<game_name>/reviews/<review_id>")
+def review_page(game_name, review_id):
+	if not review_id.isdigit():
+		abort(404)
+
+	game = games_manager.get_game_by_name(game_name)
+	review = content_manager.get_review_by_id(review_id)
+	if not game or not review:
+		return abort(404)
+	else:
+		return render_template("games/review_page.html", game=game, review=review)

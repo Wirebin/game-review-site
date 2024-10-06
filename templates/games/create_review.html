@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div>
+        <h1>Create a new review for game: {{ game.name }}</h1>
+
+        <form action="{{ url_for('create_review', game_name=game.name) }}" method="POST">
+            <p>Title:<br>
+            <input type="text" name="title" placeholder="Type something..." autocomplete="on" value="{{ request.form['title'] }}"></p><br>
+
+            <p>Score:<br>
+            <select name="score" autocomplete="on">
+                <option value="{{ request.form['score'] }}" selected disabled hidden>
+                    {% if request.form['score']%}
+                        {{ request.form['score'] }}
+                    {% else %}
+                        -
+                    {% endif %}</option>
+                <option value="10">10</option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+            </select></p><br>
+            
+            <p>Content:<br>
+            <textarea name="content" placeholder="Type something..." autocomplete="on">{{ request.form['content'] }}</textarea></p>
+            <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+            <input type="submit" value="Post">
+        </form>
+    </div>
+{% endblock %}

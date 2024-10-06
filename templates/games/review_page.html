@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div >
+        <h1>{{ review.title }}</h1>
+        <p>Score: {{ review.score }}</p>
+        <p class="text-area">{{ review.content }}</p>
+    </div>
+{% endblock %}
