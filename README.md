@@ -1,5 +1,5 @@
 # Game Review Site
-A site where you can review games and have discussions with other people about them.
+This is a web app where you can review games and have discussions with other people about them.
 The site allows you to make an account and give scores to different games. Reviews and discussion posts require an account.
 There are 2 access levels, one for standard users and another for an admin. An admin can add new games to the database and 
 remove/edit reviews and discussion posts if needed.
@@ -16,8 +16,24 @@ The site features are:
 
 ## Status
 
-Safe Log in, Sign up and game posts/replies have been implemented, reviews and scoring are still in the works. The 'search bar' and 'game list' features are not implemented yet. The character limiters are not yet implemented. The user can navigate the site, find added games and add new genres and games to db as admin.
-Currently the website has barely any styling done to it, this will be done later.
+The app is still missing the scoring feature as well as the ability for admins to delete and edit posts/reviews. Everything else has been implemented from the feature list. There are also additional features that are still planned like improved website styling and filling out the user profile as well as the home page.
+
+Status of features:
+- [x] The user can create an account, log in and out.
+- [x] The user can search for different games using a search feature.
+- [x] The user can give games a personal score with their account.
+- [x] The user can write a review and publish it on the website with their account.
+- [x] The user can create discussion posts and replies to said posts with their account.
+- [x] The admin can add new games to the database through the website.
+- [ ] The admin can edit and delete reviews, posts and replies if needed.
+- [ ] The user can see an average rating for games that is formed from the personal scores of all users.
+
+Things I would still like to do:
+* Fill the Home and Profile pages with something to look at.
+* Create a functional 'My List' page.
+* Add filters for game searching.
+* Improve website style.
+* Clean up some files and comment code.
 
 ## Setup Guide
 
@@ -36,16 +52,14 @@ cd game-review-site
 DATABASE_URL=local-database-address
 SECRET_KEY=your-secret-key
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
-
-&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
 
 3. Next, activate the virtual environment and install the necessary dependencies.
 
 ```shell
 python3 -m venv venv
 source venv/bin/activate
-pip install -r ./requirements.txt
+pip install -r requirements.txt
 ```
 
 4. Run the following command in the root folder to create the needed database tables.
@@ -59,9 +73,7 @@ psql < schema.sql
 ```shell
 psql < db_setup.sql
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 28 genres and 25 games to the database.
-
-&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 28 genres and 25 games to the database.
 
 6. Run the application with the following:
 
