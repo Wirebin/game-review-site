@@ -1,6 +1,6 @@
 import secrets
 from app import db
-from flask import session, request, abort
+from flask import session, request, abort, flash
 from sqlalchemy.sql import text
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -9,11 +9,21 @@ def signup(username, password):
     if session.get("csrf-token") != request.form.get("csrf-token"):
         return abort(403)
     
+    if len(username) < 2 or len(username) > 20:
+        flash("Username must be between 2-20 characters.", "error")
+        return False
+
+    # Check if password is within limits
+    if len(password) < 8 or len(password) >= 128:
+        flash(f"Password is too short or long.", "error")
+        return False
+    
     sql = text("SELECT id from users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if user:
         print("User already exists!")
+        flash(f"Username not available.", "error")
         return False
     else:
         hash_value = generate_password_hash(password)
