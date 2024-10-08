@@ -71,3 +71,9 @@ def get_user_by_name(username):
     sql = text("SELECT id, access_level FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     return result.fetchone()
+
+
+def get_game_from_list(user_id, game_id):
+    sql = text("SELECT id, status, score FROM play_stats WHERE user_id=:user_id AND game_id=:game_id")
+    result = db.session.execute(sql, {"user_id":user_id, "game_id":game_id})
+    return result.fetchone()

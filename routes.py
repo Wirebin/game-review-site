@@ -5,10 +5,22 @@ import games_manager
 import content_manager
 from decorators import admin_required, login_required
 from models import Game, Post, Reply, Review
+from sqlalchemy import and_, or_, desc
+
+def deformat_url(url):
+	return url.replace("-", " ")
 
 
 # Need to split this file into multiple later!
 #
+
+@app.before_request
+def handle_url_formatting():
+	if request.method == "GET":
+		url = request.path
+		if " " in url:
+			return redirect(url.replace(" ", "-"))
+
 
 @app.route("/")
 def index():
@@ -157,39 +169,64 @@ def game_browse():
 		return render_template("/games/game_browse.html", title="Games", games=games)
 	
 
-@app.route("/games/<game_name>", methods=["GET"])
+@app.route("/games/<game_name>", methods=["POST", "GET"])
 def game_page(game_name):
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
+	user_id = session.get("user_id")
 
 	if not game:
 		return abort(404)
-	else:
-		posts_preview = content_manager.get_posts(game.id)[:3]
+	
+	if request.method == "GET":
+		posts_preview =  Post.query.filter(and_(Post.game_id==game.id, Post.user_id==user_id)) \
+								   .order_by(desc(Post.created_at)) \
+								   .limit(3).all()
 		reviews_preview = content_manager.get_reviews(game.id)[:3]
-		return render_template("/games/game_page.html", title="", game=game, 
-						 		current_page="overview", posts=posts_preview,
-								reviews=reviews_preview)
+
+		if not user_id:
+			return render_template("/games/game_page.html", title="Overview", game=game, 
+							 		current_page="overview", posts=posts_preview,
+									reviews=reviews_preview)
+		else:
+			list_status = account.get_game_from_list(user_id, game.id)
+			return render_template("/games/game_page.html", title="Overview", game=game, 
+						  			current_page="overview", posts=posts_preview, 
+									reviews=reviews_preview, status=list_status)
+
+	if request.method == "POST":
+		# Adding the game to users list
+		if not account.get_game_from_list(user_id, game.id):
+			if games_manager.add_to_list(user_id, game.id):
+				flash("Game added to your list.", "success")
+			else:
+				flash("Failed to add game to your list.", "error")
+			return redirect("#")
+		
+		# If game already added to list / updating
+		if games_manager.change_status(user_id, game.id, request.form["play_stats"], request.form["score"]):
+			flash("Game status updated.", "success")
+		else:
+			flash("Failed to update game status.", "error")
+		return redirect("#")
 
 
 @app.route("/games/<game_name>/posts", methods=["GET"])
 def game_posts(game_name):
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
 	if not game:
 		return abort(404)
 	else:
 		page = request.args.get("page", 1, type=int)
 		page_limit = 25
 		posts = Post.query.filter_by(game_id=game.id).paginate(page=page, per_page=page_limit)
-		poster = account.get_user_by_id(session.get("user_id"))
 		return render_template("/games/game_posts.html", title="Posts", 
-						 		poster=poster, game=game, 
-								posts=posts, current_page="posts")
+								game=game, posts=posts, current_page="posts")
 	
 
 @app.route("/games/<game_name>/posts/create_post", methods=["POST", "GET"])
 @login_required
 def create_post(game_name):
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
 	if request.method == "GET":
 		if not game:
 			return abort(404)
@@ -208,7 +245,7 @@ def post_page(game_name, post_id):
 	if not post_id.isdigit():
 		abort(404)
 	
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
 	post = content_manager.get_post_by_id(post_id)
 	reply = request.args.get("reply", 1, type=int)
 	reply_limit = 10
@@ -229,7 +266,7 @@ def post_page(game_name, post_id):
 
 @app.route("/games/<game_name>/reviews/", methods=["GET"])
 def game_reviews(game_name):
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
 	if not game:
 		return abort(404)
 	else:
@@ -237,13 +274,14 @@ def game_reviews(game_name):
 		page_limit = 10
 		reviews = Review.query.filter_by(game_id=game.id).paginate(page=page, per_page=page_limit)
 
-		return render_template("games/game_reviews.html", game=game, reviews=reviews, current_page="reviews")
+		return render_template("games/game_reviews.html", title="Reviews", game=game, 
+						 		reviews=reviews, current_page="reviews")
 
 
 @app.route("/games/<game_name>/reviews/create_review", methods=["POST", "GET"])
 @login_required
 def create_review(game_name):
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
 
 	if request.method == "GET":
 		return render_template("games/create_review.html", game=game)
@@ -268,7 +306,7 @@ def review_page(game_name, review_id):
 	if not review_id.isdigit():
 		abort(404)
 
-	game = games_manager.get_game_by_name(game_name)
+	game = games_manager.get_game_by_name(deformat_url(game_name))
 	review = content_manager.get_review_by_id(review_id)
 	if not game or not review:
 		return abort(404)
