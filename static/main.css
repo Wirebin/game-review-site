@@ -13,6 +13,10 @@ body {
 	color: black;
 }
 
+.container {
+	margin-bottom: 100px;
+}
+
 .header-link {
 	margin-right: 30px;
 	font-size: 22px;
@@ -38,8 +42,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	background-color: #ffb20b;
-	margin-left: auto;
-	margin-right: auto;
+	height: 80px;
 }
 
 .primary-middle-panel {
@@ -52,7 +55,6 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 80px;
 }
 
 .right-panel-list {
@@ -101,7 +103,6 @@ body {
 .vertical-flex {
 	display: flex;
 	flex-direction: column;
-	background-color: #d5d1e9;
 }
 
 .center-x {
@@ -117,18 +118,25 @@ body {
 }
 
 .preview-content {
-	background-color: rgb(233, 233, 233);
-	min-width: 400px;
-	min-height: 50px;
+	display: flex;
+	justify-content: space-between;
+	width: 400px;
+	min-height: auto;
 	border-radius: 10px;
 	padding: 8px;
-	box-shadow: 0 1px 2px rgb(0 0 0 / 25%);;
+	box-shadow: 0 0 4px rgb(0 0 0 / 25%);
+	overflow-wrap: break-word;
+}
+.preview-content:hover {
+	box-shadow: 0 0 4px black;
+	background-color: #e9e9e9;
 }
 
 .preview-header {
 	justify-content: space-between;
 	padding-left: 10px;
 	padding-right: 26px;
+	margin-bottom: 14px;
 }
 
 .left-nav ul {
@@ -207,8 +215,8 @@ body {
 }
 
 .sub-header a:hover {
-	color: #9a5fac;
-	border-bottom: solid black 3px;
+	color: #0094b6;
+	border-bottom: solid black 2px;
 }
 
 .text-area {
@@ -220,16 +228,28 @@ body {
 	/*max-width: 1000px;*/
 }
 
-.left-tab {
-	min-width: 220px;
-	margin-top: 20px;
+.small-section {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}.small-section select {
+	margin-right: 10px;
+}
+.small-section span, .small-section select {
+	flex: 1;
 }
 
-.left-tab-info {
-	font-size: 14px;
+.left-tab {
+	min-width: 220px;
+	margin-top: 10px;
 }
+
 .left-tab-info div {
 	padding: 2px 0 2px 2px;
+}
+
+.fs-14 {
+	font-size: 14px;
 }
 
 .dark-text {
@@ -241,11 +261,29 @@ body {
 	text-decoration: underline;
 }
 
+.mt-10 {
+	margin-top: 10px;
+}
+
+.mb-5 {
+	margin-bottom: 5px;
+}
+.mb-10 {
+	margin-bottom: 10px;
+}
+.mb-15 {
+	margin-bottom: 15px;
+}
+
 .add-to-list {
 	background-color: #ffc13a;
 	padding: 4px 25px;
 	border-radius: 4px;
 	border: solid #ac790d 2px;
+	margin: auto;
+	align-items: center;
+
+	cursor: pointer;
 
 	position: relative; 
     display: inline-block; 
