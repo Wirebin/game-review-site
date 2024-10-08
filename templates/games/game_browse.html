@@ -9,7 +9,7 @@
     <div class="games-wrap">
         {% if games %}
             {% for game in games.items %}
-                <a class="small-link" href="games/{{ game.name }}">       
+                <a class="small-link" href="games/{{ game.format_url() }}">       
                     <div class="game">
                         <!--<img src="/static/images/image-placeholder.jpg">-->
                         <span>{{ game.name }}</span>

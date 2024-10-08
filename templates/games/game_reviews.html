@@ -1,14 +1,6 @@
 {% extends "games/game_page.html" %}
 
 {% block game_content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <p>{{msg}}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     <!-- REVIEWS -->
     <div class="sub-header">
         <a href="{{ url_for('create_review', game_name=game.name) }}">Create a review</a>

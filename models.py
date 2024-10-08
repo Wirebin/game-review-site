@@ -1,4 +1,6 @@
 from app import db
+from account import get_user_by_id
+from sqlalchemy import desc, and_, or_
 
 
 class User(db.Model):
@@ -17,6 +19,9 @@ class Game(db.Model):
 
     def formatted_date(self):
         return self.release_date.strftime("%d.%m.%Y")
+    
+    def format_url(self):
+        return self.name.replace(" ", "-")
 
 
 class Post(db.Model):
@@ -33,6 +38,15 @@ class Post(db.Model):
 
     def formatted_date(self):
         return self.created_at.strftime("%H:%M - %d.%m.%Y")
+    
+    def get_poster(self):
+        poster = get_user_by_id(self.user_id)
+        return poster.username
+    
+    def get_latest_reply(self):
+        return Reply.query.filter(Reply.post_id==self.id) \
+                    .order_by(desc(Reply.created_at)) \
+                    .limit(1).all()
 
 
 class Reply(db.Model):
