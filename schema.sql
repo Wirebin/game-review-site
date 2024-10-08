@@ -26,10 +26,11 @@ CREATE TABLE game_genres (
 	genre_id INTEGER REFERENCES genres
 );
 
-CREATE TABLE scores (
+CREATE TABLE play_stats (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
 	game_id INTEGER REFERENCES games,
+	status TEXT,
 	score INTEGER
 );
 
