@@ -76,6 +76,9 @@ class Review(db.Model):
     score = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.Date, nullable=False)
 
-
     def formatted_date(self):
         return self.created_at.strftime("%H:%M - %d.%m.%Y")
+
+    def get_poster(self):
+        poster = get_user_by_id(self.user_id)
+        return poster.username
