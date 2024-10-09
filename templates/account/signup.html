@@ -1,33 +1,51 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	{% with messages = get_flashed_messages() %}
+	{% with messages = get_flashed_messages(with_categories=true) %}
 		{% if messages %}
-			{% for msg in messages %}
-				<p>{{msg}}</p>
+			{% for category, msg in messages %}
+				{% if category == "success" %}
+					<div class="flash-success">
+						<p>{{msg}}</p>
+					</div>
+				{% elif category == "error" %}
+					<div class="flash-error">
+						<p>{{msg}}</p>
+					</div>
+				{% endif %}
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
 
-	<h1>Sign Up</h1>
+	<div class="horizontal-flex center-x">
+		<div class="vertical-flex center-y">
+			<span class="fs-30 dark-text mb-15">Sign Up</span>
 	
-	<form action="/signup" method="POST">
-		<div class="username-tab">
-			<p>Username:<br>
-			<input type="text" name="username" maxlength="20" autocomplete="on" value="{{ request.form['username'] }}"></p>
-		</div>
+			<form action="/signup" method="POST">
+				<div class="username-tab mb-15">
+					<p>Username:<br>
+					<input class="big-input" type="text" name="username" maxlength="20" autocomplete="on" value="{{ request.form['username'] }}"></p>
+				</div>
 
-		<div class="password-tab">
-			<p>Password:<br>
-			<input type="password" name="password" maxlength="128" autocomplete="off"></p>
+				<div class="password-tab mb-5">
+					<p>Password:<br>
+					<input class="big-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
+				</div>
+
+				<div class="mr-auto mb-15">
+					<p>Your password must include:</p>
+					<ul class="signup-list">
+						<li><p>8 to 128 characters.</p></li>
+					</ul>
+				</div>
+
+				<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+
+				<div class="horizontal-flex center-x">
+					<input class="big-submit mb-15" type="submit" value="Sign Up">
+				</div>
+			</form>
 		</div>
-		<p>Your password must include:</p>
-		<ul class="signup-list">
-			<li><p>8 to 128 characters.</p></li>
-		</ul><br>
-		
-		<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
-		<input type="submit" value="Sign Up">
-	</form>
+	</div>
 
 {% endblock %}

@@ -17,6 +17,19 @@ body {
 	margin-bottom: 100px;
 }
 
+.flash-error {
+	background-color: #ff9d9d;
+	padding: 10px;
+	border-radius: 6px;
+	margin: 100px;
+}
+
+.flash-success {
+	background-color: #b8ffa9;
+	padding: 10px;
+	border-radius: 6px;
+}
+
 .header-link {
 	margin-right: 30px;
 	font-size: 22px;
@@ -95,6 +108,10 @@ body {
 	font-size: 20px;
 }
 
+.mr-auto {
+	margin-right: auto;
+}
+
 .horizontal-flex {
 	display: flex;
 	flex-direction: row;
@@ -103,6 +120,12 @@ body {
 .vertical-flex {
 	display: flex;
 	flex-direction: column;
+}
+
+.big-submit {
+	width: 100px;
+	height: 35px;
+	border-radius: 8px;
 }
 
 .center-x {
@@ -248,8 +271,18 @@ body {
 	padding: 2px 0 2px 2px;
 }
 
+.big-input {
+	width: 300px;
+	height: 30px;
+	border-radius: 6px;
+}
+
 .fs-14 {
 	font-size: 14px;
+}
+
+.fs-30 {
+	font-size: 30px;
 }
 
 .dark-text {
@@ -291,10 +324,6 @@ body {
 
 .add-to-list:hover {
 	background-color: #e99f00;
-}
-
-.small-box {
-	max-width: 500px;
 }
 
 .game {
