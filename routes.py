@@ -107,6 +107,7 @@ def profile(username):
 								username=username, 
 								access_level = user.access_level)
 
+
 @app.route("/profile")
 def logged_profile():
 	user = session.get("user_id")

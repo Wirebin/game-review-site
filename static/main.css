@@ -31,7 +31,7 @@ body {
 }
 
 .header-link {
-	margin-right: 30px;
+	margin: 0 15px;
 	font-size: 22px;
 }
 
@@ -56,18 +56,6 @@ body {
 	justify-content: space-between;
 	background-color: #ffb20b;
 	height: 80px;
-}
-
-.primary-middle-panel {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.primary-right-panel {
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 .right-panel-list {
@@ -97,7 +85,7 @@ body {
 }
 
 .search-bar {
-	margin: auto;
+	margin: auto 0;
 }
 
 .search-bar input {
@@ -110,6 +98,13 @@ body {
 
 .mr-auto {
 	margin-right: auto;
+}
+.ml-auto {
+	margin-left: auto;
+}
+
+.no-pad {
+	padding: 0;
 }
 
 .horizontal-flex {
@@ -126,6 +121,9 @@ body {
 	width: 100px;
 	height: 35px;
 	border-radius: 8px;
+}
+.big-submit:hover {
+	cursor: pointer;
 }
 
 .center-x {

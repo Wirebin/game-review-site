@@ -17,8 +17,8 @@
 	<div class="container">
 		<div class="header-wrap">
 			<div class="primary-header">
-				<div class="primary-middle-panel">
-					<ul class="middle-panel-list">
+				<div class="horizontal-flex center-y center-x" id="primary-middle-panel">
+					<ul class="middle-panel-list no-pad">
 						<li>
 							<a id="home" class="header-link" href="{{ url_for('index') }}">Home</a>
 						</li>
@@ -40,15 +40,19 @@
 					</form>
 				</div>
 			
-				<div class="primary-right-panel">
+				<div class="horizontal-flex center-y center-x" id="primary-right-panel">
+					<ul class="right-panel-list no-pad">
 					{% if session["user_id"] %}
 						{% if session["access_level"] == "admin" %}
+						<li>
 							<a class="header-link" href="{{ url_for('control_panel') }}">Control Panel</a>
+						</li>
 						{% endif %}
-						<a id="log-out" class="header-link" href="{{ url_for('logout') }}">Log Out</a>
+						<li>
+							<a id="log-out" class="header-link" href="{{ url_for('logout') }}">Log Out</a>
+						</li>
 
 					{% else %}
-					<ul class="right-panel-list">
 						<li>
 							<a id="log-in" class="header-link" href="{{ url_for('login') }}">Log in</a>
 						</li>
