@@ -84,7 +84,7 @@ def signup():
 		
 		# If OK, new account is created
 		else:
-			flash(f"Account created for {username}. Please log in.", "info")
+			flash(f"Account created for {username}. Please log in.", "success")
 			return redirect("/login")
 
 
@@ -131,10 +131,10 @@ def add_genre():
 	if request.method == "POST":
 		name = request.form["genre_name"].capitalize()
 		if not games_manager.add_genre(name):
-			flash(f"The genre '{name}' already exists.")
+			flash(f"The genre '{name}' already exists.", "error")
 			return redirect("#")
 		else:
-			flash(f"Genre '{name}' added to database.")
+			flash(f"Genre '{name}' added to database.", "success")
 			return redirect("#")
 
 
@@ -152,10 +152,10 @@ def add_game():
 		release_date = request.form["release_date"]
 
 		if not games_manager.add_game(name, genres, release_date):
-			flash(f"The game already exists.")
+			flash(f"The game already exists.", "error")
 			return redirect("#")
 		else:
-			flash(f"Game '{name}' successfully added to the database!")
+			flash(f"Game '{name}' successfully added to the database!", "success")
 			return redirect("#")
 		
 
@@ -260,7 +260,7 @@ def post_page(game_name, post_id):
 		content = request.form["content"]
 		content_manager.create_reply(content, game, post)
 
-		flash("New reply created successfully")
+		flash("New reply created successfully", "success")
 		return redirect("#")
 		
 
@@ -297,7 +297,7 @@ def create_review(game_name):
 		if not content_manager.create_review(game, title, content, score):
 			return render_template("games/create_review.html", game=game)
 
-		flash("A review successfully created!", "info")
+		flash("A review successfully created!", "success")
 		return redirect(url_for("game_reviews", game_name=game.name))
 
 
