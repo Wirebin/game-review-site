@@ -16,7 +16,7 @@ The site features are:
 
 ## Status
 
-The app is still missing the scoring feature as well as the ability for admins to delete and edit posts/reviews. Everything else has been implemented from the feature list. There are also additional features that are still planned like improved website styling and filling out the user profile as well as the home page.
+The app is still missing the ability for admins to delete and edit posts/reviews and seeing score averages. Everything else has been implemented from the feature list. There are also additional features that are still planned like improved website styling and filling out the user profile as well as the home page.
 
 Status of features:
 - [x] The user can create an account, log in and out.
