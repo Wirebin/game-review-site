@@ -1,6 +1,7 @@
 from app import db
-from account import get_user_by_id
+from account import get_user_by_id, get_game_from_list
 from sqlalchemy import desc, and_, or_
+from flask import session
 
 
 class User(db.Model):
@@ -22,6 +23,9 @@ class Game(db.Model):
     
     def format_url(self):
         return self.name.replace(" ", "-")
+
+    def get_game_from_list(self):
+        return get_game_from_list(session.get("user_id"), self.id)
 
 
 class Post(db.Model):

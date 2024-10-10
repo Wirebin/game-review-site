@@ -14,8 +14,14 @@
                         <!--<img src="/static/images/image-placeholder.jpg">-->
                         <span>{{ game.name }}</span>
                         <div class="game-info">
-                            <div class="avg-score">Average score: </div>
-                            <div class="user-score">Your score: </div>
+                            <div class="avg-score">Average score: -</div>
+                            <div class="user-score">Your score: 
+                                {% if game.get_game_from_list() %}
+                                    {{ game.get_game_from_list().score }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
                             <div class="release">Released on: {{ game.release_date }}</div>
                         </div>
                     </div>

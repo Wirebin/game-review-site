@@ -353,8 +353,8 @@ body {
 }
 
 .game-info {
-	display: flex;
-	gap: 80px;
+	display: grid;
+	grid-template-columns: 180px 160px 200px;
 }
 
 .game a {
