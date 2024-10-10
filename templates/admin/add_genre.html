@@ -1,14 +1,6 @@
 {% extends "admin/control_panel.html" %}
 
 {% block controls_content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <p>{{msg}}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     <div class="controls">
         <h1>Add a genre</h1>
         <form action="/control_panel/add_genre" method="POST">

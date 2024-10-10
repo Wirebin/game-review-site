@@ -64,9 +64,24 @@
 				</div>
 			</div>
 		</div>
+
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, msg in messages %}
+					{% if category == "success" %}
+						<div class="flash-success mt-15">
+							<span>{{msg}}</span>
+						</div>
+					{% elif category == "error" %}
+						<div class="flash-error mt-15">
+							<span>{{msg}}</span>
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
 		
-		<br>
-		<div class="content-wrap">
+		<div class="content-wrap mt-15">
 			<div class="content">
 				{% block content %}{% endblock %}
 			</div>

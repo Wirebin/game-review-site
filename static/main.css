@@ -19,15 +19,22 @@ body {
 
 .flash-error {
 	background-color: #ff9d9d;
-	padding: 10px;
-	border-radius: 6px;
-	margin: 100px;
+	box-shadow: 0 0 2px #910000;
+	padding: 1rem;
+	border-radius: 12px;
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .flash-success {
 	background-color: #b8ffa9;
-	padding: 10px;
-	border-radius: 6px;
+	box-shadow: 0 0 2px #476847;
+	padding: 1rem;
+	border-radius: 12px;
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .header-link {
@@ -294,6 +301,9 @@ body {
 
 .mt-10 {
 	margin-top: 10px;
+}
+.mt-15 {
+	margin-top: 15px;
 }
 
 .mb-5 {

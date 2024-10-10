@@ -1,22 +1,6 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			{% for category, msg in messages %}
-				{% if category == "success" %}
-					<div class="flash-success">
-						<p>{{msg}}</p>
-					</div>
-				{% elif category == "error" %}
-					<div class="flash-error">
-						<p>{{msg}}</p>
-					</div>
-				{% endif %}
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
-
 	<div class="horizontal-flex center-x">
 		<div class="vertical-flex center-y">
 			<span class="fs-30 dark-text mb-15">Log in</span>
@@ -37,7 +21,7 @@
 					<input type="submit" class="big-submit mb-15" value="Log In">
 				</div>
 			</form>
-			<div class="mr-auto">
+			<div class="mr-auto mt-15">
 				<span>No account? Make one here: </span><br>
 				<a class="standard-link" href="{{ url_for('signup') }}">Sign Up</a>
 			</div>
