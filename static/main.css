@@ -133,6 +133,25 @@ body {
 	cursor: pointer;
 }
 
+.medium-input {
+	width: 300px;
+	height: 30px;
+	border-radius: 6px;
+}
+
+.big-input {
+	width: 800px;
+	height: 300px;
+	border-radius: 8px;
+	resize: vertical;
+}
+
+.title-input {
+	width: 800px;
+	height: 35px;
+	border-radius: 8px;
+}
+
 .center-x {
 	justify-content: center;
 }
@@ -274,12 +293,6 @@ body {
 
 .left-tab-info div {
 	padding: 2px 0 2px 2px;
-}
-
-.big-input {
-	width: 300px;
-	height: 30px;
-	border-radius: 6px;
 }
 
 .fs-14 {

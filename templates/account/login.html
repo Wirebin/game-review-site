@@ -8,12 +8,12 @@
 			<form action="/login" method="POST">
 				<div class="username-tab mb-15">
 					<p>Username:<br>
-					<input class="big-input" type="text" name="username" maxlength="20"></p>
+					<input class="medium-input" type="text" name="username" maxlength="20"></p>
 				</div>
 
 				<div class="password-tab mb-15">
 					<p>Password:<br>
-					<input class="big-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
+					<input class="medium-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
 				</div>
 
 				<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">

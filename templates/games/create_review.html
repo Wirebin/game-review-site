@@ -1,37 +1,34 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div>
-        <h1>Create a new review for game: {{ game.name }}</h1>
+    <div class="vertical-flex center-y">
+        <span class="dark-text fs-30 u-line">Review for {{ game.name }}</span>
 
         <form action="{{ url_for('create_review', game_name=game.name) }}" method="POST">
-            <p>Title:<br>
-            <input type="text" name="title" placeholder="Type something..." autocomplete="on" value="{{ request.form['title'] }}"></p><br>
-
-            <p>Score:<br>
-            <select name="score" autocomplete="on">
-                <option value="{{ request.form['score'] }}" selected disabled hidden>
-                    {% if request.form['score']%}
-                        {{ request.form['score'] }}
-                    {% else %}
-                        -
-                    {% endif %}</option>
-                <option value="10">10</option>
-                <option value="9">9</option>
-                <option value="8">8</option>
-                <option value="7">7</option>
-                <option value="6">6</option>
-                <option value="5">5</option>
-                <option value="4">4</option>
-                <option value="3">3</option>
-                <option value="2">2</option>
-                <option value="1">1</option>
-            </select></p><br>
+            <p class="mt-10 mb-10">Title:<br>
+            <input class="title-input fs-14" type="text" name="title" placeholder="Type something..." autocomplete="on" maxlength="100" value="{{ request.form['title'] }}"></p>
             
-            <p>Content:<br>
-            <textarea name="content" placeholder="Type something..." autocomplete="on">{{ request.form['content'] }}</textarea></p>
+            <p class="mt-10 mb-10">Content:<br>
+            <textarea class="big-input fs-14" name="content" placeholder="Type something..." spellcheck="false" autocomplete="on" maxlength="20000">{{ request.form['content'] }}</textarea></p>
+
+            <p>Score:
+                <select class="fs-14 mt-10 mb-10" name="score" autocomplete="on">
+                    <option selected disabled hidden>-</option>
+                    <option value="10">10</option>
+                    <option value="9">9</option>
+                    <option value="8">8</option>
+                    <option value="7">7</option>
+                    <option value="6">6</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+            </p>
+
             <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
-            <input type="submit" value="Post">
+            <input class="big-submit fs-14 mt-10" type="submit" value="Publish">
         </form>
     </div>
 {% endblock %}

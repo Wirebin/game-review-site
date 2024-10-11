@@ -1,17 +1,18 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div>
-        <h1>Create a new post for game: {{ game.name }}</h1>
+    <div class="vertical-flex center-y">
+        <span class="dark-text fs-30 u-line">Post for {{ game.name }}</span>
 
         <form action="{{ url_for('create_post', game_name=game.name) }}" method="POST">
-            <p>Title:<br>
-            <input type="text" name="title" placeholder="Type something..."></p>
+            <p class="mt-10 mb-10">Title:<br>
+            <input class="title-input fs-14" type="text" name="title" placeholder="Type something..."></p>
             
-            <p>Content:<br>
-            <textarea name="content" placeholder="Type something..."></textarea></p>
+            <p class="mt-10 mb-10">Content:<br>
+            <textarea class="big-input fs-14" name="content" placeholder="Type something..."></textarea></p>
+            
             <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
-            <input type="submit" value="Post">
+            <input class="big-submit fs-14 mt-10" type="submit" value="Post">
         </form>
     </div>
 {% endblock %}
