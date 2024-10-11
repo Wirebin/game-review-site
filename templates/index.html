@@ -1,12 +1,14 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    {% if not session.get("user_id") %}
-        <h1>Welcome</h1>
+    <div class="content">
+        {% if not session.get("user_id") %}
+            <h1>Welcome</h1>
 
-    {% else %}
-        <h1>Home</h1>
+        {% else %}
+            <h1>Home</h1>
 
-        <p>logged in as {{ username }}</p>
-    {% endif %}
+            <p>logged in as {{ username }}</p>
+        {% endif %}
+    </div>
 {% endblock %}

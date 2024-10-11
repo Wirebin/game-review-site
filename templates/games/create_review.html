@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="vertical-flex center-y">
+    <div class="vertical-flex center-y content">
         <span class="dark-text fs-30 u-line">Review for {{ game.name }}</span>
 
         <form action="{{ url_for('create_review', game_name=game.name) }}" method="POST">

@@ -1,37 +1,39 @@
 {% extends "games/game_page.html" %}
 
 {% block game_content %}
-    <!-- REVIEWS -->
-    <div class="">
-        <div class="sub-header">
-            <a href="{{ url_for('create_review', game_name=game.name) }}">Create a review</a>
-        </div>
-        <br><br>
+    <div class="content">
+        <!-- REVIEWS -->
+        <div class="">
+            <div class="sub-header">
+                <a href="{{ url_for('create_review', game_name=game.name) }}">Create a review</a>
+            </div>
+            <br>
 
-        <div class="posts">
-            {% for review in reviews %}
-                <a href="{{ url_for('review_page', game_name=game.name, review_id=review.id) }}">
-                    <div class="post game">
-                        {{ review.title }}
-                            | {{ review.get_poster() }}
-                    </div>
-                </a>
+            <div class="posts">
+                {% for review in reviews %}
+                    <a href="{{ url_for('review_page', game_name=game.name, review_id=review.id) }}">
+                        <div class="post game">
+                            {{ review.title }}
+                                | {{ review.get_poster() }}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- PAGE NAVIGATION -->
+        <div class="nav-wrap">
+            {% if reviews.has_prev %}
+                <a class="small-link" href="{{ url_for('game_reviews', page=reviews.prev_num, game_name=game.name) }}">&lt; Previous</a>
+            {% endif %}
+            
+            {% for page in reviews.iter_pages() %}
+                {{ page }}
             {% endfor %}
+            
+            {% if reviews.has_next %}
+                <a class="small-link" href="{{ url_for('game_reviews', page=reviews.next_num, game_name=game.name) }}">Next &gt;</a>
+            {% endif %}
         </div>
-    </div>
-
-    <!-- PAGE NAVIGATION -->
-    <div class="nav-wrap">
-        {% if reviews.has_prev %}
-            <a class="small-link" href="{{ url_for('game_reviews', page=reviews.prev_num, game_name=game.name) }}">&lt; Previous</a>
-        {% endif %}
-        
-        {% for page in reviews.iter_pages() %}
-            {{ page }}
-        {% endfor %}
-        
-        {% if reviews.has_next %}
-            <a class="small-link" href="{{ url_for('game_reviews', page=reviews.next_num, game_name=game.name) }}">Next &gt;</a>
-        {% endif %}
     </div>
 {% endblock %}

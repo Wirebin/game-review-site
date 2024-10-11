@@ -1,101 +1,103 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>{{ game.name }}</h1>
-    <hr><br>
+    <div class="content mb-10">
+        <h1>{{ game.name }}</h1>
 
-    <div class="sub-header-wrap">
-        <div class="sub-header">
-            <ul class="horizontal-flex">
-                <li>
-                    <a class="{{ 'active' if current_page == 'overview' }} sub-header" \
-                    href="{{ url_for('game_page', game_name=game.name) }}">Overview</a>
-                </li>
-                <li>
-                    <a class="{{ 'active' if current_page == 'reviews' }} sub-header" \
-                    href="{{ url_for('game_reviews', game_name=game.name) }}">Reviews</a>
-                </li>
-                <li>
-                    <a class="{{ 'active' if current_page == 'posts' }} sub-header" \
-                    href="{{ url_for('game_posts', game_name=game.name) }}">Posts</a>
-                </li>
-            </ul>
+        <div class="sub-header-wrap mt-15 mb-10">
+            <div class="sub-header">
+                <ul class="horizontal-flex">
+                    <li>
+                        <a class="{{ 'active' if current_page == 'overview' }} sub-header" \
+                        href="{{ url_for('game_page', game_name=game.name) }}">Overview</a>
+                    </li>
+                    <li>
+                        <a class="{{ 'active' if current_page == 'reviews' }} sub-header" \
+                        href="{{ url_for('game_reviews', game_name=game.name) }}">Reviews</a>
+                    </li>
+                    <li>
+                        <a class="{{ 'active' if current_page == 'posts' }} sub-header" \
+                        href="{{ url_for('game_posts', game_name=game.name) }}">Posts</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-    <br>
-    <hr>
  
     <div class="page-content">
         {% block game_content %}
             <div class="horizontal-flex">
-                <div class="left-tab">
-                    <!-- If Logged In -->
-                    {% if session["user_id"] %}
-                        <!-- If Game Not In List -->
-                        {% if not status %}
-                            <form action="{{ url_for('game_page', game_name=game.name) }}", class="horizontal-flex mb-10", method="POST">
-                                <input type="submit" class="add-to-list" value="Add to List">
-                            </form>
+                <div class="left-tab-wrap">
+                    <div class="left-tab">
+                        <!-- If Logged In -->
+                        {% if session["user_id"] %}
+                            <div class="content pt-20 pb-20 mb-10">
+                                <!-- If Game Not In List -->
+                                {% if not status %}
+                                    <form class="horizontal-flex", action="{{ url_for('game_page', game_name=game.name) }}", method="POST">
+                                        <input type="submit" class="add-to-list" value="Add to List">
+                                    </form>
 
-                        {% else %}
-                            <p class="dark-text fs-14 mb-15 u-line">Your game status:</p>
-                            <form action="{{ url_for('game_page', game_name=game.name) }}", class="vertical-flex", method="POST">
-                                <div class="small-section mb-10">
-                                    <span class="fs-14 dark-text">Status:</span>
-                                    <select name="play_stats" >
-                                        <option value="playing" {% if status.status == "playing" %}selected{% endif %}>Playing</option>
-                                        <option value="completed" {% if status.status == "completed" %}selected{% endif %}>Completed</option>
-                                        <option value="paused" {% if status.status == "paused" %}selected{% endif %}>On-Hold</option>
-                                        <option value="dropped" {% if status.status == "dropped" %}selected{% endif %}>Dropped</option>
-                                        <option value="planning" {% if status.status == "planning" %}selected{% endif %}>Plan to play</option>
-                                    </select>
-                                </div>
+                                {% else %}
+                                    <span class="dark-text fs-14 u-line">Your game status:</span>
+                                    <form action="{{ url_for('game_page', game_name=game.name) }}", class="vertical-flex", method="POST">
+                                        <div class="small-section mb-10 mt-10">
+                                            <span class="fs-14 dark-text">Status:</span>
+                                            <select name="play_stats" >
+                                                <option value="playing" {% if status.status == "playing" %}selected{% endif %}>Playing</option>
+                                                <option value="completed" {% if status.status == "completed" %}selected{% endif %}>Completed</option>
+                                                <option value="paused" {% if status.status == "paused" %}selected{% endif %}>On-Hold</option>
+                                                <option value="dropped" {% if status.status == "dropped" %}selected{% endif %}>Dropped</option>
+                                                <option value="planning" {% if status.status == "planning" %}selected{% endif %}>Plan to play</option>
+                                            </select>
+                                        </div>
 
-                                <div class="small-section mb-10">
-                                    <span class="fs-14 dark-text">Score:</span>
-                                    <select name="score">
-                                        <option value=10 {% if status.score == 10 %}selected{% endif %}>10</option>
-                                        <option value=9 {% if status.score == 9 %}selected{% endif %}>9</option>
-                                        <option value=8 {% if status.score == 8 %}selected{% endif %}>8</option>
-                                        <option value=7 {% if status.score == 7 %}selected{% endif %}>7</option>
-                                        <option value=6 {% if status.score == 6 %}selected{% endif %}>6</option>
-                                        <option value=5 {% if status.score == 5 %}selected{% endif %}>5</option>
-                                        <option value=4 {% if status.score == 4 %}selected{% endif %}>4</option>
-                                        <option value=3 {% if status.score == 3 %}selected{% endif %}>3</option>
-                                        <option value=2 {% if status.score == 2 %}selected{% endif %}>2</option>
-                                        <option value=1 {% if status.score == 1 %}selected{% endif %}>1</option>
-                                        <option value="-" {% if status.score == None %}selected{% endif %}>-</option>
-                                    </select>
-                                </div>
+                                        <div class="small-section mb-10">
+                                            <span class="fs-14 dark-text">Score:</span>
+                                            <select name="score">
+                                                <option value=10 {% if status.score == 10 %}selected{% endif %}>10</option>
+                                                <option value=9 {% if status.score == 9 %}selected{% endif %}>9</option>
+                                                <option value=8 {% if status.score == 8 %}selected{% endif %}>8</option>
+                                                <option value=7 {% if status.score == 7 %}selected{% endif %}>7</option>
+                                                <option value=6 {% if status.score == 6 %}selected{% endif %}>6</option>
+                                                <option value=5 {% if status.score == 5 %}selected{% endif %}>5</option>
+                                                <option value=4 {% if status.score == 4 %}selected{% endif %}>4</option>
+                                                <option value=3 {% if status.score == 3 %}selected{% endif %}>3</option>
+                                                <option value=2 {% if status.score == 2 %}selected{% endif %}>2</option>
+                                                <option value=1 {% if status.score == 1 %}selected{% endif %}>1</option>
+                                                <option value="-" {% if status.score == None %}selected{% endif %}>-</option>
+                                            </select>
+                                        </div>
 
-                                <p class="mb-15 scoring-element"><input type="submit" value="Update"></p>
-                            </form>
+                                        <span class="scoring-element">
+                                            <input type="submit" value="Update">
+                                        </span>
+                                    </form>
+                                {% endif %}
+                            </div>
                         {% endif %}
-                        <hr>
-                    {% endif %}
 
-                    <!-- Game Info -->
-                    <div class="left-tab-info fs-14 mt-10">
-                        <div><span class="dark-text u-line">Information</span></div>
-                        <div><span class="dark-text">Title:</span> {{ game.name }}</div>
-                        <div><span class="dark-text">Release Date:</span> {{ game.release_date }}</div>
-                        <div><span class="dark-text">Average Score:</span> -</div>
-                        <div><span class="dark-text">Developer:</span> {{ game.developer }}</div>
-                        <div><span class="dark-text">Publisher:</span> {{ game.publisher }}</div>
+                        <!-- Game Info -->
+                        <div class="left-tab-info content fs-14 pb-20 pt-20">
+                            <div><span class="dark-text u-line">Information</span></div>
+                            <div><span class="dark-text">Title:</span> {{ game.name }}</div>
+                            <div><span class="dark-text">Release Date:</span> {{ game.release_date }}</div>
+                            <div><span class="dark-text">Average Score:</span> -</div>
+                            <div><span class="dark-text">Developer:</span> {{ game.developer }}</div>
+                            <div><span class="dark-text">Publisher:</span> {{ game.publisher }}</div>
+                        </div>
                     </div>
                 </div>
-                <hr>
 
-                <div>
-                    <div class="text-area">
+                <div class="vertical-flex">
+                    <div class="text-area content mb-10">
                         <h3>Description:</h3>
                         {{ game.description }}
                     </div>
 
-                    <br><hr><br>
                     <div class="horizontal-flex preview-wrap">
-                        <div class="preview">
-                            <div class="preview-header horizontal-flex">
+                        <div class="preview content mr-10">
+                            <div class="preview-header horizontal-flex mt-5 mb-15">
                                 <h3>Reviews</h3>
                                 {% if reviews %}
                                     <a class="standard-link" href="{{ url_for('game_reviews', game_name=game.name) }}">See All Reviews ></a>
@@ -106,12 +108,10 @@
                                 {% if reviews %}
                                     {% for review in reviews %}
                                         <a href="{{ url_for('review_page', game_name=game.name, review_id=review.id) }}">
-                                            <div class="preview-content">
+                                            <div class="preview-content mb-10">
                                                 <span>{{ review.title }}</span>
-                                                <span></span>
                                             </div>
                                         </a>
-                                        <br>
                                     {% endfor %}
                                 {% else %}
                                 <a class="standard-link" href="{{ url_for('create_review', game_name=game.name) }}">No reviews yet, create one?</a>
@@ -119,8 +119,8 @@
                             </div>
                         </div>
         
-                        <div class="preview">
-                            <div class="preview-header horizontal-flex">
+                        <div class="preview content">
+                            <div class="preview-header horizontal-flex mt-5 mb-15">
                                 <h3>Posts</h3>
                                 {% if posts %}
                                 <a class="standard-link" href="{{ url_for('game_posts', game_name=game.name) }}">See All Posts ></a>
@@ -130,12 +130,10 @@
                                 {% if posts %}
                                     {% for post in posts %}
                                         <a href="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}">
-                                            <div class="preview-content">
+                                            <div class="preview-content mb-10">
                                                 <span>{{ post.title }}</span>
-                                                <span>{{ post.get_latest_reply().user_id }}</span>
                                             </div>
                                         </a>
-                                        <br>
                                     {% endfor %}
                                 {% else %}
                                     <a class="standard-link" href="{{ url_for('create_post', game_name=game.name) }}">No posts yet, create one?</a>

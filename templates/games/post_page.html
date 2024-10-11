@@ -1,29 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div>
-        <h1>{{ post.title }}</h1>  
-        <br>
+    <div class="content">
+        <span class="dark-text fs-30">{{ post.title }}</span>
         <p>{{ post.content }}</p>
     </div>
 
     <div>
         {% if replies.items %}
                 {% for reply in replies %}
-                    <hr>
-                    <br>
-                    <p>{{ reply.content }}
-                    | Posted by {{ reply.user.username }} |
-                    Posted at {{ reply.formatted_date() }}
-                    </p>
-                    <br>
+                    <div class="content mt-10 mb-10">
+                        <p>{{ reply.content }}
+                        | Posted by {{ reply.user.username }} |
+                        Posted at {{ reply.formatted_date() }}
+                        </p>
+                    </div>
                 {% endfor %}
         {% endif %}
     </div>
 
     {% if session.get("user_id") %}
         <div>
-            <hr>
             <br>
             <form action="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}" method="POST">
                 <p>Reply to the post:</p>
@@ -34,7 +31,6 @@
         </div>
     {% else %}
         <div>
-            <hr>
             <br>
             <p>You need to be logged in to reply.</p>
         </div>
