@@ -28,33 +28,38 @@ def create_reply(content, game, post):
                              "post_id":post.id,
                              "content":content})
     db.session.commit()
-    return True
+    flash("New reply created successfully", "success")
 
 
 def create_review(game, title, content, score):
     if session.get("csrf-token") != request.form.get("csrf-token"):
         return abort(403)
     
-    if len(title) < 10 or len(title) > 100:
-        flash("The title must be between 10-100 characters.")
+    if not score:
+        flash("Please select a score before publishing.", "error")
         return False
     
+    if len(title) < 10 or len(title) > 100:
+        flash("The title must be between 10-100 characters.", "error")
+        return False
+
     if len(content) < 500:
         flash("The review must have at least 500 characters.", "error")
         return False
     elif len(content) >= 20000:
         flash("The review must be under 20000 characters.", "error")
         return False
-
-    sql = text("""INSERT INTO reviews (user_id, game_id, title, content, score)
-                  VALUES (:user_id, :game_id, :title, :content, :score)""")
-    db.session.execute(sql, {"user_id":session.get("user_id"),
-                             "game_id":game.id,
-                             "title":title,
-                             "content":content,
-                             "score":score})
-    db.session.commit()
-    return True
+    else:
+        sql = text("""INSERT INTO reviews (user_id, game_id, title, content, score)
+                    VALUES (:user_id, :game_id, :title, :content, :score)""")
+        db.session.execute(sql, {"user_id":session.get("user_id"),
+                                "game_id":game.id,
+                                "title":title,
+                                "content":content,
+                                "score":score})
+        db.session.commit()
+        flash("A review successfully created!", "success")
+        return True
 
 
 def get_post_by_id(post_id):

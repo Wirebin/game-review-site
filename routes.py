@@ -1,6 +1,6 @@
 from app import app
 import account
-from flask import render_template, session, request, redirect, flash, abort, url_for
+from flask import render_template, session, request, redirect, abort, url_for
 import games_manager
 import content_manager
 from decorators import admin_required, login_required
@@ -62,10 +62,8 @@ def login():
 		# If user exists
 		if account.login(username, password):
 			return redirect("/")
-		
 		# If password is incorrect or user doesn't exist
 		else:
-			flash("Wrong username or password. Please try again.", "error")
 			return redirect("#")
 
 	
@@ -81,10 +79,8 @@ def signup():
 		# Check if user creation is possible
 		if not account.signup(username, password):
 			return render_template("/account/signup.html", title="Sign Up")
-		
 		# If OK, new account is created
 		else:
-			flash(f"Account created for {username}. Please log in.", "success")
 			return redirect("/login")
 
 
@@ -131,12 +127,8 @@ def add_genre():
 	
 	if request.method == "POST":
 		name = request.form["genre_name"].capitalize()
-		if not games_manager.add_genre(name):
-			flash(f"The genre '{name}' already exists.", "error")
-			return redirect("#")
-		else:
-			flash(f"Genre '{name}' added to database.", "success")
-			return redirect("#")
+		games_manager.add_genre(name)
+		return redirect("#")
 
 
 @app.route("/control_panel/add_game", methods=["POST", "GET"])
@@ -152,12 +144,8 @@ def add_game():
 		genres = request.form.getlist("genre")
 		release_date = request.form["release_date"]
 
-		if not games_manager.add_game(name, genres, release_date):
-			flash(f"The game already exists.", "error")
-			return redirect("#")
-		else:
-			flash(f"Game '{name}' successfully added to the database!", "success")
-			return redirect("#")
+		games_manager.add_game(name, genres, release_date)
+		return redirect("#")
 		
 
 @app.route("/games", methods=["GET"])
@@ -182,7 +170,9 @@ def game_page(game_name):
 		posts_preview =  Post.query.filter(and_(Post.game_id==game.id, Post.user_id==user_id)) \
 								   .order_by(desc(Post.created_at)) \
 								   .limit(3).all()
-		reviews_preview = content_manager.get_reviews(game.id)[:3]
+		reviews_preview = Review.query.filter(and_(Review.game_id==game.id, Review.user_id==user_id)) \
+			 						  .order_by(desc(Review.created_at)) \
+									  .limit(3).all()
 
 		if not user_id:
 			return render_template("/games/game_page.html", title="Overview", game=game, 
@@ -197,17 +187,11 @@ def game_page(game_name):
 	if request.method == "POST":
 		# Adding the game to users list
 		if not account.get_game_from_list(user_id, game.id):
-			if games_manager.add_to_list(user_id, game.id):
-				flash("Game added to your list.", "success")
-			else:
-				flash("Failed to add game to your list.", "error")
+			games_manager.add_to_list(user_id, game.id)
 			return redirect("#")
 		
 		# If game already added to list / updating
-		if games_manager.change_status(user_id, game.id, request.form["play_stats"], request.form["score"]):
-			flash("Game status updated.", "success")
-		else:
-			flash("Failed to update game status.", "error")
+		games_manager.change_status(user_id, game.id, request.form["play_stats"], request.form["score"])
 		return redirect("#")
 
 
@@ -261,7 +245,6 @@ def post_page(game_name, post_id):
 		content = request.form["content"]
 		content_manager.create_reply(content, game, post)
 
-		flash("New reply created successfully", "success")
 		return redirect("#")
 		
 
@@ -291,15 +274,10 @@ def create_review(game_name):
 		title = request.form["title"]
 		content = request.form["content"]
 		score = request.form.get("score")
-		if not score:
-			flash("Please select a score before publishing.", "error")
-			return render_template("games/create_review.html", game=game)
-
 		if not content_manager.create_review(game, title, content, score):
 			return render_template("games/create_review.html", game=game)
-
-		flash("A review successfully created!", "success")
-		return redirect(url_for("game_reviews", game_name=game.name))
+		else:
+			return redirect(url_for("game_reviews", game_name=game.name))
 
 
 @app.route("/games/<game_name>/reviews/<review_id>")

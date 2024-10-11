@@ -22,7 +22,6 @@ def signup(username, password):
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if user:
-        print("User already exists!")
         flash(f"Username not available.", "error")
         return False
     else:
@@ -31,7 +30,7 @@ def signup(username, password):
                       VALUES (:username, :password, 'user')""")
         db.session.execute(sql, {"username":username, "password":hash_value})
         db.session.commit()
-        print(f"User {username} created!")
+        flash(f"Account created for {username}. Please log in.", "success")
         return True
     
 
@@ -42,17 +41,14 @@ def login(username, password):
     sql = text("SELECT id, access_level, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
-    if not user:
-        print("User not found!")
+    if not user or not check_password_hash(user.password, password):
+        flash("Wrong username or password. Please try again.", "error")
         return False
     else:
-        if check_password_hash(user.password, password):
-            session["user_id"] = user.id
-            session["access_level"] = user.access_level
-            session["csfr-token"] = secrets.token_hex(16)
-            return True
-        else:
-            return False
+        session["user_id"] = user.id
+        session["access_level"] = user.access_level
+        session["csfr-token"] = secrets.token_hex(16)
+        return True
 
 
 def logout():
