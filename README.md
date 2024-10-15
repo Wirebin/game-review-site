@@ -1,5 +1,5 @@
 # Game Review Site
-This is a web app where you can review games and have discussions with other people about them.
+A a web app where you can review games and have discussions with other people about them.
 The site allows you to make an account and give scores to different games. Reviews and discussion posts require an account.
 There are 2 access levels, one for standard users and another for an admin. An admin can add new games to the database and 
 remove/edit reviews and discussion posts if needed.
@@ -11,12 +11,14 @@ The site features are:
 * The user can see an average rating for games that is formed from the personal scores of all users.
 * The user can write a review and publish it on the website with their account.
 * The user can create discussion posts and replies to said posts with their account.
-* The admin can edit and delete reviews, posts and replies if needed.
+* The admin can edit and delete reviews, posts and replies if needed. (Users can edit/delete their own reviews/posts)
 * The admin can add new games to the database through the website.
 
 ## Status
 
-The app is still missing the ability for admins to delete and edit posts/reviews and seeing score averages. Everything else has been implemented from the feature list. There are also additional features that are still planned like improved website styling and filling out the user profile as well as the home page.
+16.10.2024
+
+The app is still missing the ability for admins to delete and edit posts/reviews. Everything else has been implemented from the feature list. There are also additional features that are still planned like improved website styling and filling out the user profile as well as the home page.
 
 Status of features:
 - [x] The user can create an account, log in and out.
@@ -25,8 +27,8 @@ Status of features:
 - [x] The user can write a review and publish it on the website with their account.
 - [x] The user can create discussion posts and replies to said posts with their account.
 - [x] The admin can add new games to the database through the website.
-- [ ] The admin can edit and delete reviews, posts and replies if needed.
-- [ ] The user can see an average rating for games that is formed from the personal scores of all users.
+- [x] The user can see an average rating for games that is formed from the personal scores of all users.
+- [ ] The admin can edit and delete reviews, posts and replies if needed. (Users can edit/delete their own reviews/posts)
 
 Things I would still like to do:
 * Fill the Home and Profile pages with something to look at.
@@ -52,7 +54,7 @@ cd game-review-site
 DATABASE_URL=local-database-address
 SECRET_KEY=your-secret-key
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remember to replace the template values with your own.
 
 3. Next, activate the virtual environment and install the necessary dependencies.
 
@@ -73,13 +75,15 @@ psql < schema.sql
 ```shell
 psql < db_setup.sql
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 28 genres and 25 games to the database.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_setup.sql adds 28 genres and 25 games to the database.
 
 6. Run the application with the following:
 
 ```shell
-flask --app app.py run
+flask run
 ```
+
+You can now visit the site at ```localhost:5000```
 
 ## How to use
 
