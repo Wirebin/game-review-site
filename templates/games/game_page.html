@@ -8,15 +8,15 @@
             <div class="sub-header">
                 <ul class="horizontal-flex">
                     <li>
-                        <a class="{{ 'active' if current_page == 'overview' }} sub-header" \
+                        <a class="{{ 'active' if title == 'Overview' }} sub-header" \
                         href="{{ url_for('game_page', game_name=game.name) }}">Overview</a>
                     </li>
                     <li>
-                        <a class="{{ 'active' if current_page == 'reviews' }} sub-header" \
+                        <a class="{{ 'active' if title == 'Reviews' }} sub-header" \
                         href="{{ url_for('game_reviews', game_name=game.name) }}">Reviews</a>
                     </li>
                     <li>
-                        <a class="{{ 'active' if current_page == 'posts' }} sub-header" \
+                        <a class="{{ 'active' if title == 'Posts' }} sub-header" \
                         href="{{ url_for('game_posts', game_name=game.name) }}">Posts</a>
                     </li>
                 </ul>
@@ -114,7 +114,7 @@
                                         </a>
                                     {% endfor %}
                                 {% else %}
-                                <a class="standard-link" href="{{ url_for('create_review', game_name=game.name) }}">No reviews yet, create one?</a>
+                                    <a class="standard-link" href="{{ url_for('create_review', game_name=game.name) }}">No reviews yet, create one?</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                             <div class="preview-header horizontal-flex mt-5 mb-15">
                                 <h3>Posts</h3>
                                 {% if posts %}
-                                <a class="standard-link" href="{{ url_for('game_posts', game_name=game.name) }}">See All Posts ></a>
+                                    <a class="standard-link" href="{{ url_for('game_posts', game_name=game.name) }}">See All Posts ></a>
                                 {% endif %}
                             </div>
                             <div class="preview-posts">

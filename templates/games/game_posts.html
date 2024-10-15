@@ -11,11 +11,11 @@
 
             <div class="posts">
                 {% for post in posts %}
-                    <a href="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}">
+                    <a href="{{ url_for('post_page', game_name=game_url, post_id=post.id) }}">
                         <div class="post game">
                             {{ post.title }}
-                            | Created by: {{ post.get_poster() }} |
-                            Created at: {{ post.formatted_date() }}
+                            | Created by: {{ post.username }}
+                            Created at: {{ post.created_at }}
                         </div>
                     </a>
                 {% endfor %}
@@ -24,16 +24,22 @@
 
         <!-- PAGE NAVIGATION -->
         <div class="nav-wrap">
-            {% if posts.has_prev %}
-                <a class="small-link" href="{{ url_for('game_posts', page=posts.prev_num) }}">&lt; Previous</a>
+            {% if page > 1 %}
+                <a class="standard-link nav-link" href="{{ url_for('game_posts', game_name=game_url, page=1) }}">«</a>
+                <a class="standard-link nav-link" href="{{ url_for('game_posts', game_name=game_url, page=page-1) }}">&lt;</a>
             {% endif %}
             
-            {% for page in posts.iter_pages() %}
-                {{ page }}
+            {% for i in range(page_range[0], page_range[1] + 1) %}
+                {% if i == page %}
+                    <span class="dark-text margin-6">{{ i }}</span>
+                {% else %}
+                    <a class="standard-link nav-link" href="{{ url_for('game_posts', game_name=game_url, page=i) }}">{{ i }}</a>
+                {% endif %}
             {% endfor %}
-            
-            {% if posts.has_next %}
-                <a class="small-link" href="{{ url_for('game_posts', page=posts.next_num) }}">Next &gt;</a>
+
+            {% if page < total_pages %}
+                <a class="standard-link nav-link" href="{{ url_for('game_posts', game_name=game_url, page=page+1) }}">&gt;</a>
+                <a class="standard-link nav-link" href="{{ url_for('game_posts', game_name=game_url, page=total_pages) }}">»</a>
             {% endif %}
         </div>
     </div>

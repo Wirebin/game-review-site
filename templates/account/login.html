@@ -3,28 +3,32 @@
 {% block content %}
 	<div class="horizontal-flex center-x content pb-30 pt-30">
 		<div class="vertical-flex center-y">
-			<span class="fs-30 dark-text mb-15">Log in</span>
-			
-			<form action="/login" method="POST">
-				<div class="username-tab mb-15">
-					<p>Username:<br>
-					<input class="medium-input" type="text" name="username" maxlength="20"></p>
-				</div>
+			{% if session.get("user_id") %}
+				<span class="fs-30 dark-text">Already logged in! :)</span>
+			{% else %}
+				<span class="fs-30 dark-text mb-15">Log in</span>
+				
+				<form action="/login" method="POST">
+					<div class="username-tab mb-15">
+						<p>Username:<br>
+						<input class="medium-input" type="text" name="username" maxlength="20" autocomplete="on" value="{{ username }}"></p>
+					</div>
 
-				<div class="password-tab mb-15">
-					<p>Password:<br>
-					<input class="medium-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
-				</div>
+					<div class="password-tab mb-15">
+						<p>Password:<br>
+						<input class="medium-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
+					</div>
 
-				<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
-				<div class="horizontal-flex center-x">
-					<input type="submit" class="big-submit mb-15" value="Log In">
+					<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+					<div class="horizontal-flex center-x">
+						<input type="submit" class="big-submit mb-15" value="Log In">
+					</div>
+				</form>
+				<div class="mr-auto mt-15">
+					<span>No account? Make one here: </span><br>
+					<a class="standard-link" href="{{ url_for('signup') }}">Sign Up</a>
 				</div>
-			</form>
-			<div class="mr-auto mt-15">
-				<span>No account? Make one here: </span><br>
-				<a class="standard-link" href="{{ url_for('signup') }}">Sign Up</a>
-			</div>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

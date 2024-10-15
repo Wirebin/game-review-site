@@ -6,10 +6,10 @@
 
         <form action="{{ url_for('create_post', game_name=game.name) }}" method="POST">
             <p class="mt-10 mb-10">Title:<br>
-            <input class="title-input fs-14" type="text" name="title" placeholder="Type something..."></p>
+            <input class="title-input fs-14" type="text" name="title" placeholder="Type something..." value="{{ title }}"></p>
             
             <p class="mt-10 mb-10">Content:<br>
-            <textarea class="big-input fs-14" name="content" placeholder="Type something..."></textarea></p>
+            <textarea class="big-input fs-14" name="content" placeholder="Type something...">{{ content }}</textarea></p>
             
             <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
             <input class="big-submit fs-14 mt-10" type="submit" value="Post">

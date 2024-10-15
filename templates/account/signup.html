@@ -3,36 +3,41 @@
 {% block content %}
 	<div class="horizontal-flex center-x content pt-30 pb-30">
 		<div class="vertical-flex center-y">
-			<span class="fs-30 dark-text mb-15">Sign Up</span>
-	
-			<form action="/signup" method="POST">
-				<div class="username-tab mb-15">
-					<p>Username:<br>
-					<input class="medium-input" type="text" name="username" maxlength="20" autocomplete="on" value="{{ request.form['username'] }}"></p>
-				</div>
+			{% if session.get("user_id") %}
+				<span class="fs-30 dark-text mb-5">Already logged in! :)</span>
+				<span class="fs-20">Log out before making a new account.</span>
+			{% else %}
+				<span class="fs-30 dark-text mb-15">Sign Up</span>
+		
+				<form action="/signup" method="POST">
+					<div class="username-tab mb-15">
+						<p>Username:<br>
+						<input class="medium-input" type="text" name="username" maxlength="20" autocomplete="on" value="{{ username }}"></p>
+					</div>
 
-				<div class="password-tab mb-5">
-					<p>Password:<br>
-					<input class="medium-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
-				</div>
+					<div class="password-tab mb-5">
+						<p>Password:<br>
+						<input class="medium-input" type="password" name="password" maxlength="128" autocomplete="off"></p>
+					</div>
 
-				<div class="mr-auto mb-15">
-					<p>Your password must include:</p>
-					<ul class="signup-list">
-						<li><p>8 to 128 characters.</p></li>
-					</ul>
-				</div>
+					<div class="mr-auto mb-15">
+						<p>Your password must include:</p>
+						<ul class="signup-list">
+							<li><p>8 to 128 characters.</p></li>
+						</ul>
+					</div>
 
-				<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
+					<input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
 
-				<div class="horizontal-flex center-x">
-					<input class="big-submit mb-15" type="submit" value="Sign Up">
+					<div class="horizontal-flex center-x">
+						<input class="big-submit mb-15" type="submit" value="Sign Up">
+					</div>
+				</form>
+				<div class="mr-auto mt-15">
+					<span>Already have an account? Log in here: </span><br>
+					<a class="standard-link" href="{{ url_for('login') }}">Log In</a>
 				</div>
-			</form>
-			<div class="mr-auto mt-15">
-				<span>Already have an account? Log in here: </span><br>
-				<a class="standard-link" href="{{ url_for('login') }}">Log In</a>
-			</div>
+			{% endif %}
 		</div>
 	</div>
 

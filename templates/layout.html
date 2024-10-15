@@ -66,19 +66,27 @@
 		</div>
 
 		<!-- Flash Messages -->
-		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% with messages = get_flashed_messages(category_filter=["success"]) %}
 			{% if messages %}
-				{% for category, msg in messages %}
-					{% if category == "success" %}
-						<div class="flash-success mt-15">
-							<span>{{msg}}</span>
-						</div>
-					{% elif category == "error" %}
-						<div class="flash-error mt-15">
-							<span>{{msg}}</span>
-						</div>
-					{% endif %}
-				{% endfor %}
+				<div class="flash-success mt-15">
+					<ul class="flash-msg">
+						{% for msg in messages %}
+							<li>{{msg}}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+		{% endwith %}
+
+		{% with messages = get_flashed_messages(category_filter=["error"]) %}
+			{% if messages %}
+				<div class="flash-error mt-15">
+					<ul class="flash-msg">
+					{% for msg in messages %}
+						<li>{{msg}}</li>
+					{% endfor %}
+					</ul>
+				</div>
 			{% endif %}
 		{% endwith %}
 		

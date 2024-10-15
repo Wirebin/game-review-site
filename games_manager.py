@@ -3,12 +3,45 @@ from sqlalchemy.sql import text
 from flask import session, request, abort, flash
 
 
+def search_query(query, page_limit, offset):
+    sql = text("""SELECT id, name, description, developer, publisher, release_date, created_at
+                  FROM games
+                  WHERE name ILIKE :query
+                  ORDER BY name ASC
+                  LIMIT :limit OFFSET :offset""")
+    count_sql = text("SELECT COUNT(id) FROM games WHERE name ILIKE :query")
+    result = db.session.execute(sql, {"query":f'%{query}%', "limit":page_limit, "offset":offset})
+    count = db.session.execute(count_sql, {"query":f'%{query}%'}).scalar()
+
+    return result.fetchall(), count
+
+
 def get_genres():
     sql = text("SELECT name FROM genres")
     result = db.session.execute(sql)
     genres = [genre[0] for genre in result.fetchall()]
     
     return genres
+
+
+def get_games(limit, offset, filter="name", order="ASC"):
+    filters = ["name", "avg_score", "developer", "publisher", "release_date"]
+    orders = ["DESC", "ASC"]
+
+    if filter not in filters or order not in orders:
+        flash("That filter is not allowed!", "error")
+        return
+
+    sql = text(f"""SELECT id, name, description, developer, publisher, release_date, created_at
+                   FROM games
+                   ORDER BY {filter} {order}
+                   LIMIT :limit OFFSET :offset""")
+    result = db.session.execute(sql, {"limit":limit, "offset":offset, "filter":filter, "order":order})
+    return result.fetchall()
+
+
+def count_games():
+    return db.session.execute(text("SELECT COUNT(id) FROM games")).scalar()
 
 
 def get_game_by_id(game_id):

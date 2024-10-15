@@ -9,22 +9,23 @@ def signup(username, password):
     if session.get("csrf-token") != request.form.get("csrf-token"):
         return abort(403)
     
+    errors = []
+    
+    # Check username length
     if len(username) < 2 or len(username) > 20:
-        flash("Username must be between 2-20 characters.", "error")
-        return False
-
+        errors.append("Username must be between 2-20 characters.")
     # Check if password is within limits
     if len(password) < 8 or len(password) >= 128:
-        flash(f"Password is too short or long.", "error")
-        return False
-    
+        errors.append("Password must be between 8-128 characters.")
+
     sql = text("SELECT id from users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
+    # Check existing user
     if user:
-        flash(f"Username not available.", "error")
-        return False
-    else:
+        errors.append("Username not available.")
+
+    if not errors:
         hash_value = generate_password_hash(password)
         sql = text("""INSERT INTO users (username, password, access_level)
                       VALUES (:username, :password, 'user')""")
@@ -32,6 +33,10 @@ def signup(username, password):
         db.session.commit()
         flash(f"Account created for {username}. Please log in.", "success")
         return True
+
+    for error in errors:
+        flash(error, "error")
+    return False
     
 
 def login(username, password):
@@ -73,3 +78,13 @@ def get_game_from_list(user_id, game_id):
     sql = text("SELECT id, status, score FROM play_stats WHERE user_id=:user_id AND game_id=:game_id")
     result = db.session.execute(sql, {"user_id":user_id, "game_id":game_id})
     return result.fetchone()
+
+
+def get_user_scores(user_id):
+    sql = text("""SELECT G.name, S.score 
+                  FROM play_stats S
+                  INNER JOIN games G ON S.game_id=G.id
+                  WHERE user_id=:user_id """)
+    results = db.session.execute(sql, {"user_id":user_id})
+    return {data.name: data.score for data in results}
+

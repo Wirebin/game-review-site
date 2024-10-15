@@ -2,20 +2,21 @@
 
 {% block content %}
     <div class="content">
-        <span class="dark-text fs-30">{{ post.title }}</span>
+        <p>Post by {{ post.username }}</p>
+        <span class="dark-text fs-30 text-wrap">{{ post.title }}</span>
         <p>{{ post.content }}</p>
     </div>
 
     <div>
-        {% if replies.items %}
-                {% for reply in replies %}
-                    <div class="content mt-10 mb-10">
-                        <p>{{ reply.content }}
-                        | Posted by {{ reply.user.username }} |
-                        Posted at {{ reply.formatted_date() }}
-                        </p>
-                    </div>
-                {% endfor %}
+        {% if replies %}
+            {% for reply in replies %}
+                <div class="content mt-10 mb-10 text-wrap">
+                    <p>
+                    {{ reply.content }}| Posted by {{ reply.username }} |
+                    Posted on {{ reply.created_at }}
+                    </p>
+                </div>
+            {% endfor %}
         {% endif %}
     </div>
 
@@ -31,8 +32,28 @@
         </div>
     {% else %}
         <div>
-            <br>
-            <p>You need to be logged in to reply.</p>
+            <p>You need to be logged in to reply. <a href="{{ url_for('login') }}" class="standard-link">Log In</a></p>
         </div>
     {% endif %}
+
+    <!-- PAGE NAVIGATION -->
+    <div class="nav-wrap">
+        {% if page > 1 %}
+            <a class="standard-link nav-link" href="{{ url_for('post_page', game_name=game_url, post_id=post.id, page=1) }}">«</a>
+            <a class="standard-link nav-link" href="{{ url_for('post_page', game_name=game_url, post_id=post.id, page=page-1) }}">&lt;</a>
+        {% endif %}
+        
+        {% for i in range(page_range[0], page_range[1] + 1) %}
+            {% if i == page %}
+                <span class="dark-text margin-6">{{ i }}</span>
+            {% else %}
+                <a class="standard-link nav-link" href="{{ url_for('post_page', game_name=game_url, post_id=post.id, page=i) }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a class="standard-link nav-link" href="{{ url_for('post_page', game_name=game_url, post_id=post.id, page=page+1) }}">&gt;</a>
+            <a class="standard-link nav-link" href="{{ url_for('post_page', game_name=game_url, post_id=post.id, page=total_pages) }}">»</a>
+        {% endif %}
+    </div>
 {% endblock %}

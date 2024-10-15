@@ -14,7 +14,7 @@
                     <a href="{{ url_for('review_page', game_name=game.name, review_id=review.id) }}">
                         <div class="post game">
                             {{ review.title }}
-                                | {{ review.get_poster() }}
+                              | Reviewed by {{ review.username }} | Published on {{ review.created_at }}
                         </div>
                     </a>
                 {% endfor %}
@@ -23,16 +23,22 @@
 
         <!-- PAGE NAVIGATION -->
         <div class="nav-wrap">
-            {% if reviews.has_prev %}
-                <a class="small-link" href="{{ url_for('game_reviews', page=reviews.prev_num, game_name=game.name) }}">&lt; Previous</a>
+            {% if page > 1 %}
+                <a class="standard-link nav-link" href="{{ url_for('game_reviews', game_name=game_url, page=1) }}">«</a>
+                <a class="standard-link nav-link" href="{{ url_for('game_reviews', game_name=game_url, page=page-1) }}">&lt;</a>
             {% endif %}
             
-            {% for page in reviews.iter_pages() %}
-                {{ page }}
+            {% for i in range(page_range[0], page_range[1] + 1) %}
+                {% if i == page %}
+                    <span class="dark-text margin-6">{{ i }}</span>
+                {% else %}
+                    <a class="standard-link nav-link" href="{{ url_for('game_reviews', game_name=game_url, page=i) }}">{{ i }}</a>
+                {% endif %}
             {% endfor %}
-            
-            {% if reviews.has_next %}
-                <a class="small-link" href="{{ url_for('game_reviews', page=reviews.next_num, game_name=game.name) }}">Next &gt;</a>
+
+            {% if page < total_pages %}
+                <a class="standard-link nav-link" href="{{ url_for('game_reviews', game_name=game_url, page=page+1) }}">&gt;</a>
+                <a class="standard-link nav-link" href="{{ url_for('game_reviews', game_name=game_url, page=total_pages) }}">»</a>
             {% endif %}
         </div>
     </div>
