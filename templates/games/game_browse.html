@@ -15,7 +15,13 @@
                             <!--<img src="/static/images/image-placeholder.jpg">-->
                             <span>{{ game.name }}</span>
                             <div class="{{ 'game-info-logged' if session.get('user_id') else 'game-info' }}">
-                                <div class="avg-score">Average score: -</div>
+                                <div class="avg-score">
+                                    {% if avg_scores[game.name] %}
+                                        Average score: {{ avg_scores[game.name] }}
+                                    {% else %}
+                                        Average score: -
+                                    {% endif %}
+                                </div>
                                 {% if session.get("user_id") %}
                                     <div class="user-score">
                                         {% if user_scores[game.name] %}

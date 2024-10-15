@@ -174,12 +174,13 @@ def game_browse():
 		page_count = math.ceil(games_count / page_limit)
 		page_range = [max(1, page - 2), min(page_count, page + 2)]
 
+		avg_scores = games_manager.get_avg_scores()
 		user_scores = {}
 		if session.get("user_id"):
 			user_scores = account.get_user_scores(session["user_id"])
 		
-		return render_template("/games/game_browse.html", user_scores=user_scores,
-						 		title="Games", games=games, page=page, 
+		return render_template("/games/game_browse.html", title="Games", user_scores=user_scores, 
+						 		avg_scores=avg_scores, games=games, page=page, 
 								total_pages=page_count, page_range=page_range)
 	
 
@@ -195,15 +196,18 @@ def game_page(game_name):
 		posts_preview = content_manager.get_posts_preview(game.id)
 		reviews_preview = content_manager.get_reviews_preview(game.id)
 
+		avg_scores = games_manager.get_avg_scores()
+
 		if not user_id:
 			return render_template("/games/game_page.html", title="Overview", 
 						  			game=game, posts=posts_preview,
-									reviews=reviews_preview)
+									reviews=reviews_preview, avg_scores=avg_scores)
 		else:
 			list_status = account.get_game_from_list(user_id, game.id)
 			return render_template("/games/game_page.html", title="Overview",
 						  			game=game, posts=posts_preview, 
-									reviews=reviews_preview, status=list_status)
+									reviews=reviews_preview, avg_scores=avg_scores, 
+									status=list_status)
 
 	if request.method == "POST":
 		# Adding the game to users list

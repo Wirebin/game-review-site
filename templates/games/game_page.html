@@ -82,7 +82,13 @@
                             <div><span class="dark-text u-line">Information</span></div>
                             <div><span class="dark-text">Title:</span> {{ game.name }}</div>
                             <div><span class="dark-text">Release Date:</span> {{ game.release_date }}</div>
-                            <div><span class="dark-text">Average Score:</span> -</div>
+                            <div><span class="dark-text">Average Score:</span>
+                            {% if avg_scores[game.name] %}
+                                {{ avg_scores[game.name] }}
+                            {% else %}
+                                -
+                            {% endif %}
+                            </div>
                             <div><span class="dark-text">Developer:</span> {{ game.developer }}</div>
                             <div><span class="dark-text">Publisher:</span> {{ game.publisher }}</div>
                         </div>

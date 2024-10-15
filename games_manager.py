@@ -138,9 +138,18 @@ def change_status(user_id, game_id, status, score):
             score = None
         else:
             sql = text("""UPDATE play_stats
-                        SET status=:status, score=:score
-                        WHERE user_id=:user_id AND game_id=:game_id""")
+                          SET status=:status, score=:score
+                          WHERE user_id=:user_id AND game_id=:game_id""")
             db.session.execute(sql, {"user_id":user_id, "game_id":game_id, "status":status, "score":score})
             db.session.commit()
 
         flash("Game status updated.", "success")
+
+
+def get_avg_scores():
+    sql = text("""SELECT G.name, ROUND(AVG(S.score), 2) as avg_score
+                  FROM games G
+                  INNER JOIN play_stats S ON G.id=S.game_id
+                  GROUP BY G.name""")
+    results = db.session.execute(sql).fetchall()
+    return {data.name: data.avg_score for data in results}
