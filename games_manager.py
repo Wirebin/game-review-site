@@ -88,7 +88,7 @@ def add_genre(name):
         flash(f"Genre '{name}' added successfully.", "success")
     
 
-def add_game(name, genres, release_date):
+def add_game(name, genres, developer, publisher, description, release_date):
     if session.get("csrf-token") != request.form.get("csrf-token"):
         return abort(403)
 
@@ -101,9 +101,10 @@ def add_game(name, genres, release_date):
         genre_ids = [get_genre_id(genre) for genre in genres]
 
         # Adds game to games db.
-        sql = text("""INSERT INTO games (name, release_date) 
-                      VALUES (:name, :release_date)""")
-        db.session.execute(sql, {"name":name, "release_date":release_date})
+        sql = text("""INSERT INTO games (name, developer, publisher, description, release_date) 
+                      VALUES (:name, :developer, :publisher, :description, :release_date)""")
+        db.session.execute(sql, {"name":name, "developer":developer, "publisher":publisher, 
+                                 "description":description, "release_date":release_date})
         db.session.commit()
         game_id = get_game_by_name(name)
 
