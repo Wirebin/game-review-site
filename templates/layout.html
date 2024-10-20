@@ -26,7 +26,7 @@
 							<a id="profile" class="header-link" href="{{ url_for('logged_profile', username=username) }}">Profile</a>
 						</li>
 						<li>
-							<a id="game-list" class="header-link" href="">My List</a>
+							<a id="game-list" class="header-link" href="{{ url_for('logged_list', username=username) }}">My List</a>
 						</li>
 						<li>
 							<a id="games" class="header-link" href="{{ url_for('game_browse') }}">Games</a>
@@ -43,7 +43,7 @@
 				<div class="horizontal-flex center-y center-x" id="primary-right-panel">
 					<ul class="right-panel-list no-pad">
 					{% if session["user_id"] %}
-						{% if session["access_level"] == "admin" %}
+						{% if g.user.access_level == "admin" %}
 						<li>
 							<a class="header-link" href="{{ url_for('control_panel') }}">Control Panel</a>
 						</li>

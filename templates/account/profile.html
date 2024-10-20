@@ -4,6 +4,6 @@
     <div class="content">
         <h1>{{ username }}'s Profile</h1>
         <br>
-        <a href="">Game List</a>
+        <a href="{{ url_for('my_list', username=username) }}">Game List</a>
     </div>
     {% endblock %}

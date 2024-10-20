@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="content">
+        <!-- GAMES -->
+        <div class="games-wrap">
+            {% if games %}
+                {% for game in games %}
+                    <a class="small-link" href="games/{{ game.name }}">       
+                        <div class="game">
+                            <span>{{ game.name }}</span>
+                            <div class="game-info-logged">
+                                <div class="user-score">
+                                    {% if game.score != none %}
+                                    Personal score: {{ game.score }}
+                                    {% else %}
+                                    Personal score: -
+                                    {% endif %}
+                                </div>
+                                <div class="play_status">Status: {{ game.status }}</div>
+                                <div class="release">Released on: {{ game.release_date }}</div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h2>No games :c</h2>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
