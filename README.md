@@ -1,8 +1,8 @@
 # Game Review Site
-A a web app where you can review games and have discussions with other people about them.
+A web app where you can review games and have discussions with other people about them.
 The site allows you to make an account and give scores to different games. Reviews and discussion posts require an account.
 There are 2 access levels, one for standard users and another for an admin. An admin can add new games to the database and 
-remove/edit reviews and discussion posts if needed.
+edit reviews and discussion posts if needed. Users can also edit their own reviews.
 
 The site features are:
 * The user can create an account, log in and out.
@@ -16,9 +16,9 @@ The site features are:
 
 ## Status
 
-16.10.2024
+20.10.2024
 
-The app is still missing the ability for admins to delete and edit posts/reviews. Everything else has been implemented from the feature list. There are also additional features that are still planned like improved website styling and filling out the user profile as well as the home page.
+The site is mostly feature-complete. Admins and users can edit reviews, but no posts or replies. Also there is no way to delete any content. Otherwise everything has been implemented.
 
 Status of features:
 - [x] The user can create an account, log in and out.
@@ -32,7 +32,6 @@ Status of features:
 
 Things I would still like to do:
 * Fill the Home and Profile pages with something to look at.
-* Create a functional 'My List' page.
 * Add filters for game searching.
 * Improve website style.
 * Clean up some files and comment code.
