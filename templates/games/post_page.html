@@ -1,31 +1,31 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="content">
-        <p>Post by {{ post.username }}</p>
-        <span class="dark-text fs-30 text-wrap">{{ post.title }}</span>
-        <p>{{ post.content }}</p>
+    <div class="content text-wrap">
+        <div class="dark-text fs-20 text-center mb-15">{{ post.title }}</div>
+        <div class="text-center mb-20">Created by 
+            <a class="standard-link" href="{{ url_for('profile', username=post.username) }}">{{ post.username }}</a>
+            | {{ post.created_at }}
+        </div>
+        <div class="">{{ post.content }}</div>
     </div>
 
     <div>
         {% if replies %}
             {% for reply in replies %}
-                <div class="content mt-10 mb-10 text-wrap">
-                    <p>
-                    {{ reply.content }}| Posted by {{ reply.username }} |
-                    Posted on {{ reply.created_at }}
-                    </p>
+                <div class="content mt-10 text-wrap">
+                    <div class="reply-info-logged mb-20"><a class="standard-link" href="{{ url_for('profile', username=reply.username) }}">{{ reply.username }}</a> {{ reply.created_at }}</div>
+                    <div class="text-lines">{{ reply.content }}</div>
                 </div>
             {% endfor %}
         {% endif %}
     </div>
 
     {% if session.get("user_id") %}
-        <div>
-            <br>
+        <div class="content mt-30">
             <form action="{{ url_for('post_page', game_name=game.name, post_id=post.id) }}" method="POST">
-                <p>Reply to the post:</p>
-                <textarea name="content"></textarea>
+                <p class="mb-10">Reply to the post:</p>
+                <textarea class="" name="content"></textarea>
                 <input type="hidden" name="csfr-token" value="{{ session.get('csfr-token') }}">
                 <input type="submit" value="Post">
             </form>

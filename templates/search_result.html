@@ -7,11 +7,24 @@
                 {% for game in results %}
                     <a class="small-link" href="games/{{ game.name }}">       
                         <div class="game">
-                            <!--<img src="/static/images/image-placeholder.jpg">-->
                             <span>{{ game.name }}</span>
-                            <div class="game-info">
-                                <div class="avg-score">Average score: </div>
-                                <div class="user-score">Your score: </div>
+                            <div class="{{ 'game-info-logged' if session.get('user_id') else 'game-info' }}">
+                                <div class="avg-score">
+                                    {% if avg_scores[game.name] %}
+                                        Average score: {{ avg_scores[game.name] }}
+                                    {% else %}
+                                        Average score: -
+                                    {% endif %}
+                                </div>
+                                {% if session.get("user_id") %}
+                                    <div class="user-score">
+                                        {% if user_scores[game.name] %}
+                                            Your score: {{ user_scores[game.name] }}
+                                        {% else %}
+                                            Your score: -
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                                 <div class="release">Released on: {{ game.release_date }}</div>
                             </div>
                         </div>

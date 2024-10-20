@@ -4,17 +4,20 @@
     <div class="content">
         <!-- REVIEWS -->
         <div class="">
-            <div class="sub-header">
+            <div class="sub-header mb-5">
                 <a href="{{ url_for('create_review', game_name=game.name) }}">Create a review</a>
             </div>
-            <br>
+            <hr>
 
-            <div class="posts">
+            <div class="posts mt-20">
                 {% for review in reviews %}
                     <a href="{{ url_for('review_page', game_name=game.name, review_id=review.id) }}">
-                        <div class="post game">
-                            {{ review.title }}
-                              | Reviewed by {{ review.username }} | Published on {{ review.created_at }}
+                        <div class="content-selector">
+                            <span>{{ review.title }}</span>
+                            <div class="content-info">
+                                <div class="pb-5">Reviewed by: {{ review.username }}</div> 
+                                <div>Published on {{ review.created_at }}</div>
+                            </div>
                         </div>
                     </a>
                 {% endfor %}

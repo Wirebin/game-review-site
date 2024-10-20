@@ -4,18 +4,20 @@
     <div class="content">
         <!-- POSTS -->
         <div class="">
-            <div class="sub-header">
+            <div class="sub-header mb-5">
                 <a class="" href="{{ url_for('create_post', game_name=game.name) }}">Create a post</a>
             </div>
-            <br>
+            <hr>
 
-            <div class="posts">
+            <div class="posts mt-20">
                 {% for post in posts %}
                     <a href="{{ url_for('post_page', game_name=game_url, post_id=post.id) }}">
-                        <div class="post game">
-                            {{ post.title }}
-                            | Created by: {{ post.username }}
-                            Created at: {{ post.created_at }}
+                        <div class="content-selector">
+                            <span>{{ post.title }}</span>
+                            <div class="content-info">
+                                <div>Created by: {{ post.username }}</div> 
+                                <div>Created at {{ post.created_at }}</div>
+                            </div>
                         </div>
                     </a>
                 {% endfor %}
