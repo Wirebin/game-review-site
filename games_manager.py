@@ -123,7 +123,7 @@ def add_to_list(user_id, game_id):
     if not game:
         flash("Failed to add game to your list.", "error")
     else:
-        sql = text("""INSERT INTO play_stats (user_id, game_id, status)
+        sql = text("""INSERT INTO play_status (user_id, game_id, status)
                       VALUES (:user_id, :game_id, 'playing')""")
         db.session.execute(sql, {"user_id":user_id, "game_id":game_id})
         db.session.commit()
@@ -138,7 +138,7 @@ def change_status(user_id, game_id, status, score):
         if score == "-":
             score = None
         else:
-            sql = text("""UPDATE play_stats
+            sql = text("""UPDATE play_status
                           SET status=:status, score=:score
                           WHERE user_id=:user_id AND game_id=:game_id""")
             db.session.execute(sql, {"user_id":user_id, "game_id":game_id, "status":status, "score":score})
@@ -150,7 +150,7 @@ def change_status(user_id, game_id, status, score):
 def get_avg_scores():
     sql = text("""SELECT G.name, ROUND(AVG(S.score), 2) as avg_score
                   FROM games G
-                  INNER JOIN play_stats S ON G.id=S.game_id
+                  INNER JOIN play_status S ON G.id=S.game_id
                   GROUP BY G.name""")
     results = db.session.execute(sql).fetchall()
     return {data.name: data.avg_score for data in results}

@@ -18,7 +18,7 @@ def create_post(title, content, game):
     
     if not errors:
         sql = text("""INSERT INTO posts (user_id, game_id, title, content)
-                    VALUES (:user_id, :game_id, :title, :content)""")
+                      VALUES (:user_id, :game_id, :title, :content)""")
         db.session.execute(sql, {"user_id":session.get("user_id"),
                                 "game_id":game.id,
                                 "title":title,
@@ -41,7 +41,7 @@ def create_reply(content, game, post):
         flash("A reply must be at most 10000 characters.", "error")
     else:
         sql = text("""INSERT INTO replies (user_id, game_id, post_id, content)
-                    VALUES (:user_id, :game_id, :post_id, :content)""")
+                      VALUES (:user_id, :game_id, :post_id, :content)""")
         db.session.execute(sql, {"user_id":session.get("user_id"),
                                 "game_id":game.id,
                                 "post_id":post.id,
@@ -82,9 +82,40 @@ def create_review(game, title, content, score):
     return False
 
 
+def edit_review(title, content, score, user_id, game_id, review_id):
+    if session.get("csrf-token") != request.form.get("csrf-token"):
+        return abort(403)
+
+    errors = []
+
+    if not score:
+        errors.append("Please select a score before publishing.")
+    if len(title) < 10 or len(title) > 100:
+        errors.append("The title must be between 10-100 characters.")
+    if len(content) < 500:
+        errors.append("The review must have at least 500 characters.")
+    elif len(content) >= 20000:
+        errors.append("The review must be under 20000 characters.")
+
+    if not errors:
+        sql = text("""UPDATE reviews
+                    SET title=:title, content=:content, score=:score
+                    WHERE user_id=:user_id AND game_id=:game_id AND id=:review_id""")
+        db.session.execute(sql, {"title":title, "content":content, "score":score,
+                                "user_id":user_id, "game_id":game_id, "review_id":review_id})
+        db.session.commit()
+
+        flash("Review updated successfully.", "success")
+        return True
+    
+    for error in errors:
+        flash(error, "error")
+    return False
+
+
 def get_post_by_id(post_id):
     sql = text("""SELECT P.id, P.title, P.content, 
-                         TO_CHAR(P.created_at, 'HH24.MI DD-MM-YYYY') as created_at, 
+                         TO_CHAR(P.created_at, 'HH24.MI, DD-MM-YYYY') as created_at, 
                          U.username
                   FROM posts P
                   INNER JOIN users U ON P.user_id=U.id
@@ -95,7 +126,7 @@ def get_post_by_id(post_id):
 
 def get_review_by_id(review_id):
     sql = text("""SELECT R.id, R.user_id, R.title, R.content, 
-                         R.score, TO_CHAR(R.created_at, 'HH24.MI DD-MM-YYYY') as created_at, 
+                         R.score, TO_CHAR(R.created_at, 'HH24.MI, DD-MM-YYYY') as created_at, 
                          U.username
                   FROM reviews R
                   INNER JOIN users U ON R.user_id=U.id
@@ -106,19 +137,19 @@ def get_review_by_id(review_id):
 
 def get_posts(limit, offset, game_id):
     sql = text("""SELECT P.id, P.title, P.content, 
-                         TO_CHAR(P.created_at, 'HH24.MI DD-MM-YYYY') as created_at, 
+                         TO_CHAR(P.created_at, 'HH24.MI, DD-MM-YYYY') as created_at, 
                          U.username
                   FROM posts P
                   INNER JOIN users U ON P.user_id=U.id
                   WHERE game_id=:game_id
-                  ORDER BY created_at DESC
+                  ORDER BY created_at::timestamp DESC
                   LIMIT :limit OFFSET :offset""")
     result = db.session.execute(sql, {"limit":limit, "offset":offset, "game_id":game_id})
     return result.fetchall()
 
 
 def get_replies(limit, offset, game_id, post_id):
-    sql = text("""SELECT R.content, TO_CHAR(R.created_at, 'HH24.MI DD-MM-YYYY') as created_at, 
+    sql = text("""SELECT R.content, TO_CHAR(R.created_at, 'HH24.MI, DD-MM-YYYY') as created_at, 
                          U.username
                   FROM replies R
                   INNER JOIN users U on R.user_id=U.id

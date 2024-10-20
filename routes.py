@@ -1,6 +1,6 @@
 from app import app
 import account
-from flask import render_template, session, request, redirect, abort, url_for
+from flask import render_template, session, request, redirect, abort, url_for, g
 import games_manager
 import content_manager
 from decorators import admin_required, login_required
@@ -16,11 +16,14 @@ def deformat_url(url):
 #
 
 @app.before_request
-def handle_url_formatting():
+def background_setup():
 	if request.method == "GET":
 		url = request.path
 		if " " in url:
 			return redirect(url.replace(" ", "-"))
+	
+	if session.get("user_id"):
+		g.user = account.get_user_by_id(session["user_id"])
 
 
 @app.route("/", methods=["GET"])
@@ -37,7 +40,7 @@ def index():
 			user = account.get_user_by_id(user_id)
 			return render_template("index.html", title=title,
 									username=user.username,
-									access_level=user.access_level)
+									user=user)
 			
 
 @app.route("/search", methods=["GET"])
@@ -54,9 +57,24 @@ def search():
 		page_count = math.ceil(filtered_games[1] / page_limit)
 		page_range = [max(1, page - 2), min(page_count, page + 2)]
 
+		avg_scores = games_manager.get_avg_scores()
+		user_scores = {}
+		user = None
+		if session.get("user_id"):
+			user_scores = account.get_user_scores(session["user_id"])
+			user = account.get_user_by_id(session.get("user_id"))
+
 		return render_template("search_result.html", 
 						 		title=f"Search: {query}", results=filtered_games[0], page=page, 
-								total_pages=page_count, page_range=page_range, query=query)
+								total_pages=page_count, page_range=page_range, query=query,
+								avg_scores=avg_scores, user_scores=user_scores)
+
+
+@app.route("/confirm", methods=["POST"])
+def confirm():
+	if request.method == "POST":
+		if request.form.get("delete-review"):
+			return url_for("index")
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -101,18 +119,16 @@ def logout():
 
 
 @app.route("/profile/<username>", methods=["GET"])
-@login_required
 def profile(username):
 	if request.method == "GET":
 		user = account.get_user_by_name(username)
 		# Check if user exists
 		if not user:
-			abort(404)
+			return abort(404)
 		else:
 			return render_template("/account/profile.html", 
 									title=f"{username}'s Profile", 
-									username=username, 
-									access_level = user.access_level)
+									username=username)
 
 
 @app.route("/profile", methods=["GET"])
@@ -123,7 +139,40 @@ def logged_profile():
 			return redirect("/login")
 		else:
 			return profile(account.get_user_by_id(user).username)
-	
+		
+
+@app.route("/list/<username>", methods=["GET"])
+def my_list(username):
+	if request.method == "GET":
+		user = account.get_user_by_name(username)
+		# Check if user exists
+		if not user:
+			return abort(404)
+		else:
+			# Create pagination
+			page = request.args.get("page", 1, type=int)
+			page_limit = 20
+			offset = page * page_limit - page_limit
+			games = account.get_user_list(user.id, page_limit, offset)
+
+			games_count = account.count_list(user.id)
+			page_count = math.ceil(games_count / page_limit)
+			page_range = [max(1, page - 2), min(page_count, page + 2)]
+
+			return render_template("/account/my_list.html", title=f"{username}'s List",
+									games=games, page=page, total_pages=games_count, 
+									page_range=page_range, user=user)
+
+
+@app.route("/list", methods=["GET"])
+def logged_list():
+	if request.method == "GET":
+		user = session.get("user_id")
+		if not user:
+			return redirect("/login")
+		else:
+			return my_list(account.get_user_by_id(user).username)
+
 
 @app.route("/control_panel", methods=["GET"])
 @admin_required
@@ -156,8 +205,11 @@ def add_game():
 		name = request.form["game_name"]
 		genres = request.form.getlist("genre")
 		release_date = request.form["release_date"]
+		developer = request.form["game_developer"]
+		publisher = request.form["game_publisher"]
+		description = request.form["game_description"]
 
-		games_manager.add_game(name, genres, release_date)
+		games_manager.add_game(name, genres, developer, publisher, description, release_date)
 		return redirect("#")
 		
 
@@ -264,7 +316,7 @@ def create_post(game_name):
 @app.route("/games/<game_name>/posts/<post_id>", methods=["POST", "GET"])
 def post_page(game_name, post_id):
 	if not post_id.isdigit():
-		abort(404)
+		return abort(404)
 	
 	game = games_manager.get_game_by_name(deformat_url(game_name))
 	post = content_manager.get_post_by_id(post_id)
@@ -333,17 +385,46 @@ def create_review(game_name):
 						  			content=content, score=score, game=game)
 		else:
 			return redirect(url_for("game_reviews", game_name=game.name))
+		
+
+@app.route("/games/<game_name>/reviews/<review_id>/edit_review", methods=["POST", "GET"])
+@login_required
+def edit_review(game_name, review_id):
+	game = games_manager.get_game_by_name(deformat_url(game_name))
+	review = content_manager.get_review_by_id(review_id)
+
+	title = review.title
+	content = review.content
+	score = review.score
+
+	if session.get("user_id") != review.user_id:
+		return abort(404)
+
+	if request.method == "GET":
+		return render_template("games/edit_review.html", game=game, title=title, 
+						 		content=content, score=score, review=review)
+
+	if request.method == "POST":
+		title = request.form["title"]
+		content = request.form["content"]
+		score = request.form.get("score") 
+		if not content_manager.edit_review(title, content, score, review.user_id, game.id, review.id):
+			return render_template("games/edit_review.html", title=title, content=content, 
+						  			score=score, game=game, review=review)
+		else:
+			return redirect(url_for("review_page", game_name=game.name, review_id=review_id))
 
 
 @app.route("/games/<game_name>/reviews/<review_id>", methods=["GET"])
 def review_page(game_name, review_id):
 	if request.method == "GET":
 		if not review_id.isdigit():
-			abort(404)
+			return abort(404)
 
 		game = games_manager.get_game_by_name(deformat_url(game_name))
 		review = content_manager.get_review_by_id(review_id)
 		if not game or not review:
 			return abort(404)
 		else:
-			return render_template("games/review_page.html", game=game, review=review)
+			user = account.get_user_by_id(session.get("user_id"))
+			return render_template("games/review_page.html", user=user, game=game, review=review)
